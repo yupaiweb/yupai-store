@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yupai - Premium Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script> (function(){ emailjs.init("YX-7oMzJmsRdmGcXD"); })(); </script>
+
+    <style>
+        :root {
+            --primary: #38bdf8;
+            --primary-hover: #0284c7;
+            --error: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', 'Hanuman', sans-serif; }
+        
+        body { 
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; overflow: hidden; position: relative;
+        }
+
+        #particles { position: absolute; width: 100%; height: 100%; z-index: 0; top: 0; left: 0; }
+        .square-particle {
+            position: absolute; background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(3px); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px; bottom: -100px; animation: floatUp infinite linear;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        .container { 
+            background: var(--glass-bg); width: 100%; max-width: 400px; 
+            padding: 40px 30px; border-radius: 24px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
+            z-index: 10; position: relative;
+        }
+
+        h2 { color: #0f172a; font-size: 24px; margin-bottom: 2px; font-weight: 700; text-align: center; }
+        .brand-text { color: var(--primary); font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 5px; }
+        .subtitle { color: #475569; font-size: 14px; margin-bottom: 25px; text-align: center; }
+
+        .input-wrapper { position: relative; margin-bottom: 24px; width: 100%; }
+        .name-row { display: flex; gap: 12px; margin-bottom: 0; }
+        .name-row .input-wrapper { flex: 1; margin-bottom: 24px; }
+
+        input { 
+            width: 100%; padding: 14px 16px; border: 2px solid #cbd5e1; 
+            border-radius: 12px; font-size: 14px; outline: none; transition: all 0.3s ease;
+            background: #ffffff; color: #1e293b;
+        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+        input.invalid { border-color: var(--error); animation: shake 0.4s ease-in-out; background: #fff0f0; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+        .error-hint { 
+            color: var(--error); font-size: 11px; position: absolute; bottom: -18px; left: 4px;
+            opacity: 0; transform: translateY(-5px); transition: all 0.3s ease; pointer-events: none;
+        }
+        .error-hint.show { opacity: 1; transform: translateY(0); }
+
+        .forgot-pass { text-align: right; margin-top: -15px; margin-bottom: 20px; }
+        .forgot-pass a { font-size: 12px; color: #64748b; text-decoration: none; cursor: pointer; }
+        .forgot-pass a:hover { color: var(--primary); text-decoration: underline; }
+
+        .btn-group { display: flex; gap: 10px; margin-bottom: 5px; }
+        .btn-group input { margin-bottom: 0; }
+        .btn-code { background: var(--primary); color: white; border: none; border-radius: 12px; width: 110px; cursor: pointer; font-weight: 600; font-size: 12px; }
+        .btn-code:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        .otp-messages { text-align: left; padding-left: 4px; margin-bottom: 15px; min-height: 16px; }
+        .otp-messages span { font-size: 11px; display: none; }
+        .otp-success { color: var(--success); }
+        .otp-error { color: var(--error); font-weight: 600; }
+
+        .main-btn { 
+            width: 100%; padding: 14px; background: var(--primary); color: white; border: none; 
+            border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; 
+        }
+        .main-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        /* ប៊ូតុង Guest Account */
+        .guest-btn {
+            display: flex; align-items: center; justify-content: center;
+            background: #ffffff; color: #1e293b; border: 2px solid #e2e8f0;
+            border-radius: 12px; padding: 12px; font-size: 15px; font-weight: 600;
+            cursor: pointer; margin-bottom: 20px; transition: 0.3s; width: 100%;
+        }
+        .guest-btn:hover { background: #f8fafc; border-color: #cbd5e1; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        
+        .divider {
+            display: flex; align-items: center; text-align: center; margin-bottom: 20px;
+            color: #64748b; font-size: 13px; font-weight: 500;
+        }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #e2e8f0; }
+        .divider::before { margin-right: 12px; }
+        .divider::after { margin-left: 12px; }
+
+        .toggle-link { margin-top: 20px; font-size: 14px; color: #64748b; text-align: center; }
+        .toggle-link span { color: var(--primary); cursor: pointer; font-weight: 700; }
+        .toggle-link span:hover { text-decoration: underline; }
+
+        .form-section { display: none; animation: fadeIn 0.5s ease-out forwards; }
+        .form-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #globalSuccessMsg, #globalWarningMsg { padding: 10px; border-radius: 8px; font-size: 12px; text-align: center; margin-bottom: 15px; display: none; }
+        #globalSuccessMsg { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        #globalWarningMsg { background: rgba(245, 158, 11, 0.1); color: var(--warning); font-weight: bold; }
+
+        /* ================= ផ្ទាំងទី២ Dashboard (Shop) ================= */
+        #dashboardPage {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #ffffff; z-index: 9999; overflow-y: auto;
+            animation: fadeInPage 0.4s ease-out forwards;
+        }
+        @keyframes fadeInPage { from { opacity: 0; } to { opacity: 1; } }
+
+        .dash-header {
+            background: white; padding: 15px 20px; display: flex; justify-content: space-between;
+            align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+        }
+        .dash-header .user-id { font-size: 15px; font-weight: 600; color: #64748b; }
+        .dash-header .user-id span { color: var(--primary); }
+        .dash-header .brand { font-size: 20px; font-weight: 700; color: #0f172a; margin-left: -20px; }
+        
+        .menu-wrapper { position: relative; }
+        .menu-btn { font-size: 26px; cursor: pointer; color: #0f172a; line-height: 1; padding: 0 5px; }
+        .dropdown-menu {
+            position: absolute; top: 40px; right: 0; background: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); border-radius: 12px; width: 160px;
+            display: none; flex-direction: column; overflow: hidden; border: 1px solid #e2e8f0;
+        }
+        .dropdown-menu.show { display: flex; animation: fadeIn 0.2s ease-out; }
+        .dropdown-menu button {
+            padding: 14px 15px; border: none; background: none; text-align: left;
+            font-size: 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: #1e293b;
+            font-weight: 500; transition: 0.2s;
+        }
+        .dropdown-menu button:last-child { border-bottom: none; }
+        .dropdown-menu button:hover { background: #f8fafc; color: var(--primary); padding-left: 20px; }
+
+        .dash-tabs { display: flex; background: white; border-bottom: 2px solid #000; margin-bottom: 25px; }
+        .dash-tab {
+            flex: 1; text-align: center; padding: 12px; font-size: 16px; font-weight: 700;
+            cursor: pointer; color: #0f172a; position: relative;
+        }
+        .dash-tab.active { color: var(--primary); }
+        .dash-tab.active::after {
+            content: ''; position: absolute; bottom: -2px; left: 10%; width: 80%;
+            height: 4px; background: var(--primary); border-radius: 4px 4px 0 0;
+        }
+
+        .shop-container { padding: 0 20px 40px; max-width: 500px; margin: 0 auto; }
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .product-card {
+            background: white; border-radius: 16px; padding: 25px 15px; text-align: center;
+            border: 2px solid #ef4444; transition: 0.3s; display: flex; flex-direction: column; justify-content: center;
+        }
+        .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(239, 68, 68, 0.15); }
+        .product-title { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+        .product-desc { font-size: 14px; color: #64748b; margin-bottom: 15px; }
+        .product-price { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 20px; }
+        
+        .buy-btn {
+            background: transparent; color: #ef4444; border: 2px solid #ef4444;
+            padding: 8px; border-radius: 8px; font-weight: 700; cursor: pointer;
+            width: 90%; margin: 0 auto; transition: 0.3s; font-size: 15px;
+        }
+        .buy-btn:hover { background: #ef4444; color: white; }
+        
+        .card-disabled { border-color: #cbd5e1; background: #f8fafc; }
+        .card-disabled .product-title { color: #0f172a; }
+        .btn-disabled { border-color: #cbd5e1; color: #cbd5e1; cursor: not-allowed; }
+        .btn-disabled:hover { background: transparent; color: #cbd5e1; }
+
+        .footer-text { text-align: center; color: #0f172a; margin-top: 40px; font-weight: 500; font-size: 15px; }
+
+        /* ================= ផ្ទាំង Popup Modal ដ៏ស្រស់ស្អាត (ជំនួស Alert/Prompt) ================= */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            z-index: 20000; justify-content: center; align-items: center;
+            animation: fadeInPage 0.2s ease-out;
+        }
+        .modal-content {
+            background: white; width: 85%; max-width: 340px; border-radius: 20px;
+            padding: 25px 20px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transform: translateY(20px); animation: slideUpModal 0.3s ease-out forwards;
+        }
+        @keyframes slideUpModal { to { transform: translateY(0); } }
+        .modal-content h3 { color: #0f172a; font-size: 20px; margin-bottom: 15px; font-weight: 700; }
+        
+        #modalBody { margin-bottom: 20px; }
+        .modal-info-box { background: #f8fafc; padding: 15px; border-radius: 12px; text-align: left; border: 1px solid #e2e8f0; }
+        .modal-info-box div { margin-bottom: 8px; font-size: 14px; color: #475569; }
+        .modal-info-box span { color: var(--primary); font-weight: 700; font-size: 15px; }
+        
+        .modal-actions { display: flex; gap: 10px; justify-content: center; }
+        .modal-btn {
+            border: none; padding: 12px; border-radius: 12px; font-size: 15px; font-weight: 600; 
+            cursor: pointer; flex: 1; transition: 0.2s;
+        }
+        .modal-btn-primary { background: var(--primary); color: white; }
+        .modal-btn-primary:hover { background: var(--primary-hover); }
+        .modal-btn-secondary { background: #f1f5f9; color: #475569; }
+        .modal-btn-secondary:hover { background: #e2e8f0; }
+        
+        #guestNameInput {
+            width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 12px;
+            font-size: 15px; outline: none; transition: 0.3s; text-align: center;
+        }
+        #guestNameInput:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+    </style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<div class="container" id="mainContainer">
+    <div id="loginForm" class="form-section active">
+        <h2>Welcome back</h2>
+        <div class="brand-text">Yupai ! Login</div>
+        <p class="subtitle">ចូលគណនី</p>
+        
+        <div id="globalSuccessMsg"></div>
+        <div id="globalWarningMsg"></div>
+
+        <button class="guest-btn" onclick="openGuestPrompt()">
+            <span style="font-size: 20px; margin-right: 10px;">👤</span>
+            Continue as Guest
+        </button>
+        
+        <div class="divider">ឬចូលដោយប្រើ Gmail</div>
+
+        <div class="input-wrapper">
+            <input type="email" id="lEmail" placeholder="Gmail Address">
+            <span id="lEmailErr" class="error-hint">សូមបញ្ចូល Gmail</span>
+        </div>
+        <div class="input-wrapper">
+            <input type="password" id="lPass" placeholder="Password">
+            <span id="lPassErr" class="error-hint">លេខសម្ងាត់មិនត្រឹមត្រូវ</span>
+        </div>
+        <div class="forgot-pass"><a onclick="switchForm('forgot')">forget password?</a></div>
+        <button class="main-btn" onclick="login()">Log In</button>
+        <p class="toggle-link">មិនមានគណនី <span onclick="switchForm('signup')">Sign Up</span></p>
+    </div>
+
+    <div id="forgotForm" class="form-section">
+        <h2>Reset Password</h2>
+        <div class="brand-text">Yupai ! Reset</div>
+        <p class="subtitle">ប្តូរលេខសម្ងាត់ថ្មី</p>
+        <div class="input-wrapper">
+            <input type="email" id="fEmail" placeholder="បញ្ចូល Gmail របស់អ្នក">
+            <span id="fEmailErr" class="error-hint">រកមិនឃើញគណនីនេះទេ</span>
+        </div>
+        <div class="btn-group">
+            <input type="text" id="fCode" placeholder="OTP ៦ខ្ទង់" maxlength="6">
+            <button class="btn-code" id="fBtnCode" onclick="sendForgotOTP()">Get Code</button>
+            <span id="fCodeErr" class="error-hint">កូដមិនត្រឹមត្រូវ</span>
+        </div>
+        <div class="otp-messages">
+            <span id="fOtpSuccess" class="otp-success">កូដបានផ្ញើ! សូមឆែក Gmail។</span>
+            <span id="fOtpLimit" class="otp-error"></span>
+        </div>
+        <div class="input-wrapper">
+            <input type="password" id="fNewPass" placeholder="លេខសម្ងាត់ថ្មី (យ៉ាងហោច ៦ ខ្ទង់)">
+            <span id="fPassErr" class="error-hint">យ៉ាងហោច ៦ ខ្ទង់</span>
+        </div>
+        <button class="main-btn" onclick="resetPassword()">ផ្លាស់ប្តូរលេខសម្ងាត់</button>
+        <p class="toggle-link"><span onclick="switchForm('login')">ត្រឡប់ទៅ Login</span></p>
+    </div>
+
+    <div id="verifyForm" class="form-section">
+        <h2>Security Check</h2>
+        <div class="brand-text">Yupai ! Verify</div>
+        <p class="subtitle">គណនីរបស់អ្នកធ្លាប់ត្រូវចាក់សោរ។<br>សូមផ្ទៀងផ្ទាត់ដើម្បីចូលប្រើប្រាស់។</p>
+        <div style="background: rgba(56, 189, 248, 0.1); padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 20px;">
+            <p style="font-size: 12px; color: var(--primary); font-weight: 600;">យើងបានផ្ញើកូដទៅ Gmail របស់អ្នកហើយ!</p>
+        </div>
+        <div class="input-wrapper">
+            <input type="text" id="vCode" placeholder="បញ្ចូលកូដ ៦ ខ្ទង់" maxlength="6">
+            <span id="vCodeErr" class="error-hint">កូដមិនត្រឹមត្រូវ</span>
+        </div>
+        <button class="main-btn" onclick="confirmSecurityVerify()">ផ្ទៀងផ្ទាត់ (Verify)</button>
+        <p class="toggle-link"><span onclick="switchForm('login')">ត្រឡប់ទៅ Login</span></p>
+    </div>
+
+    <div id="signupForm" class="form-section">
+        <div class="brand-text" style="font-size: 22px; margin-top: -10px;">Yupai ! Sign Up</div>
+        <p class="subtitle">ចុះឈ្មោះ</p>
+
+        <button class="guest-btn" onclick="openGuestPrompt()">
+            <span style="font-size: 20px; margin-right: 10px;">👤</span>
+            Continue as Guest
+        </button>
+        <div class="divider">ឬចុះឈ្មោះជាមួយ Gmail</div>
+
+        <div class="name-row">
+            <div class="input-wrapper"><input type="text" id="rFName" placeholder="First Name"><span id="rFNameErr" class="error-hint">បញ្ចូលនាមត្រកូល</span></div>
+            <div class="input-wrapper"><input type="text" id="rLName" placeholder="Last Name"><span id="rLNameErr" class="error-hint">បញ្ចូលនាមខ្លួន</span></div>
+        </div>
+        <div class="input-wrapper">
+            <input type="email" id="rEmail" placeholder="Gmail Address">
+            <span id="rEmailErr" class="error-hint">អនុញ្ញាតតែ @gmail.com ប៉ុណ្ណោះ</span>
+        </div>
+        <div class="btn-group">
+            <input type="text" id="rCode" placeholder="OTP" maxlength="6">
+            <button class="btn-code" id="btnCode" onclick="sendOTP()">Get Code</button>
+            <span id="rCodeErr" class="error-hint">កូដមិនត្រឹមត្រូវ</span>
+        </div>
+        <div class="otp-messages">
+            <span id="otpSuccessHint" class="otp-success">កូដត្រូវបានផ្ញើ! សូមឆែកមើលក្នុង Gmail។</span>
+            <span id="otpLimitHint" class="otp-error"></span>
+        </div>
+        <div class="input-wrapper">
+            <input type="password" id="rPass" placeholder="Password">
+            <span id="rPassErr" class="error-hint">យ៉ាងហោច ៦ ខ្ទង់</span>
+        </div>
+        <div class="input-wrapper">
+            <input type="password" id="rConf" placeholder="Confirm password">
+            <span id="rConfErr" class="error-hint">មិនត្រូវគ្នាទេ</span>
+        </div>
+        <button class="main-btn" onclick="register()">Sign Up</button>
+        <p class="toggle-link">មានគណនីរួចហើយ? <span onclick="switchForm('login')">Login</span></p>
+    </div>
+</div>
+
+<div id="dashboardPage">
+    <div class="dash-header">
+        <div class="user-id">Account ID: <span id="dashUserId">#0000</span></div>
+        <div class="brand">Yupai</div>
+        <div class="menu-wrapper">
+            <div class="menu-btn" onclick="toggleMenu()">☰</div>
+            <div class="dropdown-menu" id="dashMenu">
+                <button onclick="openModal('profile')">Account 👤</button>
+                <button onclick="logoutToChangePass()">ប្តូរ Pass 🔑</button>
+                <button style="color: #ef4444; font-weight: 700;" onclick="logout()">Logout 🚪</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="dash-tabs">
+        <div class="dash-tab active">Shop</div>
+        <div class="dash-tab" onclick="openModal('coming_soon')">coming Soon...</div>
+    </div>
+
+    <div class="shop-container">
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-title">NetFlix</div>
+                <div class="product-desc">Premium</div>
+                <div class="product-price">2-3ខែ/1.25$</div>
+                <button class="buy-btn" onclick="buyItem('NetFlix Premium', '1.25$')">Buy / ទិញ</button>
+            </div>
+            <div class="product-card">
+                <div class="product-title">Canva</div>
+                <div class="product-desc">Pro</div>
+                <div class="product-price">1ឆ្នាំ/1.50$</div>
+                <button class="buy-btn" onclick="buyItem('Canva Pro', '1.50$')">Buy / ទិញ</button>
+            </div>
+            <div class="product-card">
+                <div class="product-title">Capcut</div>
+                <div class="product-desc">Pro</div>
+                <div class="product-price">1ឆ្នាំ/17$</div>
+                <button class="buy-btn" onclick="buyItem('Capcut Pro', '17$')">Buy / ទិញ</button>
+            </div>
+            <div class="product-card card-disabled">
+                <div class="product-title">coming Soon</div>
+                <div class="product-desc" style="visibility: hidden;">Pro</div>
+                <div class="product-price">not yet.</div>
+                <button class="buy-btn btn-disabled">Buy / ទិញ</button>
+            </div>
+        </div>
+        <div class="footer-text">Coming Soon available</div>
+    </div>
+</div>
+
+<div id="yupaiModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3 id="modalTitle">ចំណងជើង</h3>
+        <div id="modalBody"></div>
+        <div class="modal-actions" id="modalActions">
+            </div>
+    </div>
+</div>
+
+<script>
+    let currentLoggedName = ""; 
+    let currentLoggedId = "";
+
+    // ========= កូដឆែកមើល Account ចាស់ (Persistent Login) =========
+    window.onload = function() {
+        const activeUser = localStorage.getItem("yupai_active_session");
+        if (activeUser) {
+            const storedData = localStorage.getItem(activeUser);
+            if (storedData) {
+                const userData = JSON.parse(storedData);
+                currentLoggedId = userData.id || "0000";
+                currentLoggedName = userData.name || "User";
+                document.getElementById("dashUserId").innerText = "#" + currentLoggedId;
+                document.getElementById("mainContainer").style.display = "none";
+                document.getElementById("dashboardPage").style.display = "block";
+            } else {
+                localStorage.removeItem("yupai_active_session");
+            }
+        }
+    };
+    // ==============================================================
+
+    const TELEGRAM_BOT_TOKEN = "8550957449:AAHoLlZYKvbkJiuAAh-w1g4sDV5cPSifBP8"; 
+    const TELEGRAM_CHAT_ID = "7615277512"; 
+    const ADMIN_EMAIL = "garamlbb123123@gmail.com";
+
+    function sendToTelegram(message) {
+        if(!TELEGRAM_CHAT_ID) return; 
+        fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message }) });
+    }
+
+    function getDeviceInfo() {
+        const ua = navigator.userAgent.toLowerCase();
+        if (/tablet|ipad/.test(ua) || (/android/.test(ua) && !/mobile/.test(ua))) return "Tablet";
+        if (/android/.test(ua)) return "Android";
+        if (/iphone|ipod/.test(ua)) return "iOS";
+        if (/windows/.test(ua)) return "Windows PC";
+        if (/mac/.test(ua)) return "Mac OS"; return "Unknown";
+    }
+
+    function createParticles() {
+        const pContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div'); p.className = 'square-particle';
+            const size = Math.random() * 40 + 15 + 'px'; p.style.width = size; p.style.height = size;
+            p.style.left = Math.random() * 100 + 'vw'; p.style.animationDelay = Math.random() * 5 + 's';
+            p.style.animationDuration = Math.random() * 10 + 15 + 's'; pContainer.appendChild(p);
+        }
+    }
+    createParticles();
+
+    function switchForm(mode) {
+        document.querySelectorAll('.form-section').forEach(f => f.classList.remove('active'));
+        document.getElementById(mode + 'Form').classList.add('active'); resetErrors();
+    }
+
+    function resetErrors() {
+        document.querySelectorAll('.error-hint').forEach(e => e.classList.remove('show'));
+        document.querySelectorAll('input').forEach(i => i.classList.remove('invalid'));
+        document.querySelectorAll('.otp-success, .otp-error, #globalWarningMsg, #globalSuccessMsg').forEach(m => m.style.display = 'none');
+    }
+
+    function triggerError(inputId, hintId, msg) {
+        const input = document.getElementById(inputId); const hint = document.getElementById(hintId);
+        input.classList.add('invalid'); if(msg) hint.innerText = msg; hint.classList.add('show');
+        setTimeout(() => input.classList.remove('invalid'), 500);
+    }
+
+    function toggleMenu() { document.getElementById("dashMenu").classList.toggle("show"); }
+    
+    document.addEventListener('click', function(event) {
+        const menuBtn = document.querySelector('.menu-wrapper');
+        if (menuBtn && !menuBtn.contains(event.target)) document.getElementById("dashMenu").classList.remove("show");
+    });
+
+    // ================== ប្រព័ន្ធ Custom Modal ជំនួសមុខងារចាស់ ==================
+    function openModal(type) {
+        document.getElementById("dashMenu").classList.remove("show"); 
+        const title = document.getElementById('modalTitle');
+        const body = document.getElementById('modalBody');
+        const actions = document.getElementById('modalActions');
+
+        if (type === 'profile') {
+            title.innerText = "ព័ត៌មានគណនី";
+            body.innerHTML = `
+                <div class="modal-info-box">
+                    <div>👤 ឈ្មោះ: <span>${currentLoggedName}</span></div>
+                    <div style="margin-bottom:0;">🆔 លេខសម្គាល់: <span>#${currentLoggedId}</span></div>
+                </div>`;
+            actions.innerHTML = `<button class="modal-btn modal-btn-primary" onclick="closeModal()">យល់ព្រម (OK)</button>`;
+        } else if (type === 'coming_soon') {
+            title.innerText = "Coming Soon 🚀";
+            body.innerHTML = `<p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">មុខងារនេះមិនទាន់បើកដំណើរការទេ! សូមរង់ចាំការ Update នៅពេលក្រោយ។</p>`;
+            actions.innerHTML = `<button class="modal-btn modal-btn-primary" onclick="closeModal()">យល់ព្រម (OK)</button>`;
+        } else if (type === 'error_empty_name') {
+            title.innerText = "បញ្ជាក់";
+            body.innerHTML = `<p style="color: #ef4444; font-size: 15px; margin-bottom: 10px;">សូមបញ្ចូលឈ្មោះ ដើម្បីអាចចូលបាន!</p>`;
+            actions.innerHTML = `<button class="modal-btn modal-btn-primary" onclick="closeModal()">យល់ព្រម (OK)</button>`;
+        }
+
+        document.getElementById('yupaiModal').style.display = 'flex';
+    }
+
+    function openGuestPrompt() {
+        const title = document.getElementById('modalTitle');
+        const body = document.getElementById('modalBody');
+        const actions = document.getElementById('modalActions');
+
+        title.innerText = "ចូលជា Guest 👤";
+        body.innerHTML = `
+            <p style="color: #64748b; font-size: 13px; margin-bottom: 15px;">សូមបញ្ចូលឈ្មោះរបស់អ្នក ដើម្បីបន្តចូលទៅកាន់ Shop:</p>
+            <input type="text" id="guestNameInput" placeholder="វាយឈ្មោះនៅទីនេះ..." autocomplete="off">
+        `;
+        actions.innerHTML = `
+            <button class="modal-btn modal-btn-secondary" onclick="closeModal()">បោះបង់</button>
+            <button class="modal-btn modal-btn-primary" onclick="submitGuestLogin()">បន្តចូល ➜</button>
+        `;
+
+        document.getElementById('yupaiModal').style.display = 'flex';
+        setTimeout(() => document.getElementById('guestNameInput').focus(), 100);
+    }
+
+    function submitGuestLogin() {
+        let guestName = document.getElementById('guestNameInput').value;
+        
+        if (guestName && guestName.trim() !== "") {
+            guestName = guestName.replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
+            let accountId = Math.floor(Math.random() * 9000) + 1000;
+            let fakeEmail = "guest_" + new Date().getTime() + "@yupai.local"; 
+            let timeNow = new Date().toLocaleString('en-GB');
+
+            let userData = {
+                id: accountId, name: guestName + " (Guest)", pass: "guest_pass",
+                failedAttempts: 0, lockedUntil: 0, requiresVerify: false,
+                createdAt: timeNow, isGuest: true
+            };
+
+            localStorage.setItem(fakeEmail, JSON.stringify(userData));
+            localStorage.setItem("yupai_active_session", fakeEmail);
+
+            currentLoggedId = accountId;
+            currentLoggedName = userData.name;
+            document.getElementById("dashUserId").innerText = "#" + currentLoggedId;
+
+            closeModal();
+            document.getElementById("mainContainer").style.display = "none";
+            document.getElementById("dashboardPage").style.display = "block";
+
+            sendToTelegram(`ចូលគណនីដោយ Guest 👤\nឈ្មោះ: ${userData.name}\nID: ${accountId}\nModel: ${getDeviceInfo()}\nម៉ោង: ${timeNow}`);
+        } else {
+            closeModal();
+            setTimeout(() => openModal('error_empty_name'), 300); // លោតផ្ទាំង Error បើវាយឈ្មោះអត់មានអក្សរ
+        }
+    }
+
+    function closeModal() { document.getElementById('yupaiModal').style.display = 'none'; }
+    // =========================================================================
+
+    function logout() { 
+        localStorage.removeItem("yupai_active_session"); 
+        location.reload(); 
+    }
+    
+    function logoutToChangePass() {
+        localStorage.removeItem("yupai_active_session"); 
+        document.getElementById("dashboardPage").style.display = "none";
+        document.getElementById("mainContainer").style.display = "block";
+        switchForm('forgot');
+    }
+
+    function buyItem(productName, price) {
+        const msg = `សួស្តី Yupai! 👋\nខ្ញុំចង់ទិញ: ${productName} (តម្លៃ: ${price})\nពីគណនី ID: #${currentLoggedId || 'មិនមាន'}\nឈ្មោះ: ${currentLoggedName || 'អតិថិជន'}`;
+        const encodedMsg = encodeURIComponent(msg);
+        const telegramURL = `https://t.me/Yupai_official?text=${encodedMsg}`;
+        const a = document.createElement('a'); a.href = telegramURL; a.target = '_blank';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+
+    let currentOTP = "", securityOTP = "", forgotOTP = "", currentLockedEmail = "", countdownTimer, fTimer;
+
+    function secureHash(text) {
+        let hash = 0; for (let i = 0; i < text.length; i++) hash = ((hash << 5) - hash) + text.charCodeAt(i);
+        return btoa((hash & hash).toString() + "yupai_secure_salt");
+    }
+
+    function getOTPData(email, key) {
+        const data = localStorage.getItem(key + email); const today = new Date().toDateString();
+        if (data) { const parsed = JSON.parse(data); if (parsed.date === today) return parsed; }
+        return { count: 0, lastSent: 0, date: today };
+    }
+
+    function sendOTP() {
+        resetErrors(); const email = document.getElementById("rEmail").value.trim().toLowerCase();
+        let fname = document.getElementById("rFName").value; const btnCode = document.getElementById("btnCode");
+        if(!email.endsWith("@gmail.com")) { triggerError("rEmail", "rEmailErr", "អនុញ្ញាតតែ @gmail.com ប៉ុណ្ណោះ"); return; }
+        const now = new Date().getTime(), otpData = getOTPData(email, 'otp_');
+        if (email !== ADMIN_EMAIL) {
+            if (otpData.count >= 2) { document.getElementById('otpLimitHint').innerText = "stop spam code !"; document.getElementById('otpLimitHint').style.display = 'block'; return; }
+            if (otpData.lastSent && (now - otpData.lastSent) < 120000) { document.getElementById('otpLimitHint').innerText = "សូមរង់ចាំបន្តិច ទើបអាចផ្ញើម្ដងទៀត។"; document.getElementById('otpLimitHint').style.display = 'block'; return; }
+        }
+        currentOTP = Math.floor(100000 + Math.random() * 900000).toString(); btnCode.innerText = "Sending..."; btnCode.disabled = true;
+        emailjs.send('service_pa8hcef', 'template_d4y04xs', { to_name: fname || "User", email: email, verification_code: currentOTP }).then(() => {
+            if (email !== ADMIN_EMAIL) { otpData.count++; otpData.lastSent = now; localStorage.setItem('otp_' + email, JSON.stringify(otpData)); }
+            document.getElementById('otpSuccessHint').style.display = 'block';
+            let t = 120; clearInterval(countdownTimer);
+            countdownTimer = setInterval(() => { t--; if(t<=0){ clearInterval(countdownTimer); btnCode.innerText = "Get Code"; btnCode.disabled = false; } else btnCode.innerText = t + "s"; }, 1000);
+        }).catch(() => { btnCode.innerText = "Get Code"; btnCode.disabled = false; document.getElementById('otpLimitHint').innerText = "បញ្ហាអ៊ីនធឺណិត"; document.getElementById('otpLimitHint').style.display = 'block'; });
+    }
+
+    function register() {
+        resetErrors(); let fname = document.getElementById("rFName").value, lname = document.getElementById("rLName").value;
+        const email = document.getElementById("rEmail").value.trim().toLowerCase(), pass = document.getElementById("rPass").value, conf = document.getElementById("rConf").value, code = document.getElementById("rCode").value;
+        let err = false;
+        if(!fname) { triggerError("rFName", "rFNameErr"); err = true; }
+        if(!lname) { triggerError("rLName", "rLNameErr"); err = true; }
+        if(!email.endsWith("@gmail.com")) { triggerError("rEmail", "rEmailErr"); err = true; }
+        if(code !== currentOTP || !code) { triggerError("rCode", "rCodeErr"); err = true; }
+        if(pass.length < 6) { triggerError("rPass", "rPassErr"); err = true; }
+        if(pass !== conf) { triggerError("rConf", "rConfErr"); err = true; }
+        if(err) return;
+
+        const fullName = fname.replace(/</g, "&lt;") + " " + lname.replace(/</g, "&lt;"), accountId = Math.floor(Math.random() * 9000) + 1000, timeNow = new Date().toLocaleString('en-GB');
+        localStorage.setItem(email, JSON.stringify({ id: accountId, name: fullName, pass: secureHash(pass), failedAttempts: 0, lockedUntil: 0, requiresVerify: false, createdAt: timeNow }));
+        sendToTelegram(`បង្កើតគណនីបានជោគជ័យ ✅\nឈ្មោះ ${fullName}\n ID : ${accountId}\nGmail: ${email}\nModel : ${getDeviceInfo()}\nបង្កើត : ${timeNow}`);
+        switchForm('login'); document.getElementById('globalSuccessMsg').innerText = "គណនីបង្កើតបានជោគជ័យ! 🎉 សូម Login"; document.getElementById('globalSuccessMsg').style.display = 'block';
+    }
+
+    function login() {
+        resetErrors(); const email = document.getElementById("lEmail").value.trim().toLowerCase(), pass = document.getElementById("lPass").value, storedData = localStorage.getItem(email);
+        if(!email.endsWith("@gmail.com")) { triggerError("lEmail", "lEmailErr", "អនុញ្ញាតតែ @gmail.com"); return; }
+        if(!storedData) { triggerError("lEmail", "lEmailErr", "មិនមានគណនីនេះទេ!"); return; }
+        
+        let userData = JSON.parse(storedData); const now = new Date().getTime();
+        if (email !== ADMIN_EMAIL && userData.lockedUntil > now) { document.getElementById('globalWarningMsg').innerText = `គណនីចាក់សោរ! រង់ចាំ ${Math.ceil((userData.lockedUntil - now) / 60000)} នាទី។`; document.getElementById('globalWarningMsg').style.display = 'block'; return; }
+
+        if(userData.pass === secureHash(pass)) {
+            if (userData.requiresVerify) { currentLockedEmail = email; sendSecurityOTP(email, userData.name); switchForm('verify'); } 
+            else {
+                userData.failedAttempts = 0; localStorage.setItem(email, JSON.stringify(userData));
+                localStorage.setItem("yupai_active_session", email);
+                currentLoggedId = userData.id || "0000";
+                currentLoggedName = userData.name || "User";
+                document.getElementById("dashUserId").innerText = "#" + currentLoggedId;
+                document.getElementById("dashboardPage").style.display = "block";
+                document.getElementById("mainContainer").style.display = "none";
+                sendToTelegram(`ការចូលគណនី បានជោគជ័យ ✅\nឈ្មោះ ${userData.name}\n ID : ${currentLoggedId}\nGmail: ${email}\nModel : ${getDeviceInfo()}`);
+            }
+        } else {
+            if (email !== ADMIN_EMAIL) {
+                userData.failedAttempts = (userData.failedAttempts || 0) + 1;
+                if (userData.failedAttempts >= 3) {
+                    userData.lockedUntil = now + (30*60*1000); userData.failedAttempts = 0; userData.requiresVerify = true;
+                    triggerError("lPass", "lPassErr", "ខុស ៣ដង! គណនីត្រូវចាក់សោរ");
+                    sendToTelegram(`⚠️ ប្រយ័ត្ន! ចូលគណនីខុស ៣ ដង!\nឈ្មោះ ${userData.name}\n ID : ${userData.id}\nGmail: ${email}\nស្ថានភាព : ចាក់សោរ ៣០នាទី 🔒`);
+                } else triggerError("lPass", "lPassErr", `ខុសលេខសម្ងាត់! (សល់ ${3 - userData.failedAttempts} ដង)`);
+                localStorage.setItem(email, JSON.stringify(userData));
+            } else triggerError("lPass", "lPassErr", "លេខសម្ងាត់មិនត្រឹមត្រូវ!");
+        }
+    }
+
+    function sendSecurityOTP(email, name) {
+        securityOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        emailjs.send('service_pa8hcef', 'template_d4y04xs', { to_name: name, email: email, verification_code: securityOTP }).catch(() => { triggerError("vCode", "vCodeErr", "បញ្ហាអ៊ីនធឺណិត!"); });
+    }
+
+    function confirmSecurityVerify() {
+        resetErrors(); const code = document.getElementById("vCode").value;
+        if (code !== securityOTP || !code) { triggerError("vCode", "vCodeErr", "កូដមិនត្រឹមត្រូវ!"); return; }
+        let userData = JSON.parse(localStorage.getItem(currentLockedEmail));
+        userData.requiresVerify = false; userData.lockedUntil = 0; localStorage.setItem(currentLockedEmail, JSON.stringify(userData));
+        localStorage.setItem("yupai_active_session", currentLockedEmail);
+        currentLoggedId = userData.id || "0000"; currentLoggedName = userData.name || "User";
+        document.getElementById("dashUserId").innerText = "#" + currentLoggedId;
+        document.getElementById("dashboardPage").style.display = "block";
+        document.getElementById("mainContainer").style.display = "none";
+    }
+
+    function sendForgotOTP() {
+        resetErrors(); const email = document.getElementById("fEmail").value.trim().toLowerCase(), btnCode = document.getElementById("fBtnCode"), storedData = localStorage.getItem(email);
+        if(!email.endsWith("@gmail.com")) { triggerError("fEmail", "fEmailErr", "អនុញ្ញាតតែ @gmail.com"); return; }
+        if(!storedData) { triggerError("fEmail", "fEmailErr", "មិនមានគណនីនេះទេ!"); return; }
+        forgotOTP = Math.floor(100000 + Math.random() * 900000).toString(); btnCode.innerText = "Sending..."; btnCode.disabled = true;
+        emailjs.send('service_pa8hcef', 'template_d4y04xs', { to_name: JSON.parse(storedData).name, email: email, verification_code: forgotOTP }).then(() => {
+            document.getElementById('fOtpSuccess').style.display = 'block'; let t = 120; clearInterval(fTimer);
+            fTimer = setInterval(() => { t--; if(t<=0){ clearInterval(fTimer); btnCode.innerText = "Get Code"; btnCode.disabled = false; } else btnCode.innerText = t + "s"; }, 1000);
+        }).catch(() => { btnCode.innerText = "Get Code"; btnCode.disabled = false; document.getElementById('fOtpLimit').innerText = "បញ្ហាអ៊ីនធឺណិត!"; document.getElementById('fOtpLimit').style.display = 'block'; });
+    }
+
+    function resetPassword() {
+        resetErrors(); const email = document.getElementById("fEmail").value.trim().toLowerCase(), code = document.getElementById("fCode").value, newPass = document.getElementById("fNewPass").value, storedData = localStorage.getItem(email);
+        let err = false;
+        if(!storedData) { triggerError("fEmail", "fEmailErr"); err = true; }
+        if(code !== forgotOTP || !code) { triggerError("fCode", "fCodeErr"); err = true; }
+        if(newPass.length < 6) { triggerError("fNewPass", "fPassErr"); err = true; }
+        if(err) return;
+        let userData = JSON.parse(storedData); userData.pass = secureHash(newPass); userData.failedAttempts = 0; userData.lockedUntil = 0; userData.requiresVerify = false;
+        localStorage.setItem(email, JSON.stringify(userData)); forgotOTP = "";
+        switchForm('login'); document.getElementById('globalSuccessMsg').innerText = "លេខសម្ងាត់ប្តូរជោគជ័យ! 🎉"; document.getElementById('globalSuccessMsg').style.display = 'block';
+    }
+</script>
+</body>
+</html>
