@@ -73,8 +73,6 @@
         .forgot-pass a { font-size: 12px; color: #64748b; text-decoration: none; cursor: pointer; }
         .forgot-pass a:hover { color: var(--primary); text-decoration: underline; }
 
-        .btn-group { display: flex; gap: 10px; margin-bottom: 5px; }
-        .btn-group input { margin-bottom: 0; }
         .btn-code { background: var(--primary); color: white; border: none; border-radius: 12px; width: 110px; cursor: pointer; font-weight: 600; font-size: 12px; }
         .btn-code:disabled { background: #94a3b8; cursor: not-allowed; }
 
@@ -89,7 +87,6 @@
         }
         .main-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
 
-        /* ប៊ូតុង Guest Account */
         .guest-btn {
             display: flex; align-items: center; justify-content: center;
             background: #ffffff; color: #1e293b; border: 2px solid #e2e8f0;
@@ -118,7 +115,7 @@
         #globalSuccessMsg { background: rgba(16, 185, 129, 0.1); color: var(--success); }
         #globalWarningMsg { background: rgba(245, 158, 11, 0.1); color: var(--warning); font-weight: bold; }
 
-        /* ================= ផ្ទាំងទី២ Dashboard (Shop) ================= */
+        /* ================= Dashboard ================= */
         #dashboardPage {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #ffffff; z-index: 9999; overflow-y: auto;
@@ -169,6 +166,15 @@
             border: 2px solid #ef4444; transition: 0.3s; display: flex; flex-direction: column; justify-content: center;
         }
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(239, 68, 68, 0.15); }
+        
+        .product-img {
+            width: 65px;
+            height: 65px;
+            object-fit: contain;
+            margin: 0 auto 12px auto;
+            border-radius: 12px;
+        }
+
         .product-title { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
         .product-desc { font-size: 14px; color: #64748b; margin-bottom: 15px; }
         .product-price { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 20px; }
@@ -180,14 +186,6 @@
         }
         .buy-btn:hover { background: #ef4444; color: white; }
         
-        .card-disabled { border-color: #cbd5e1; background: #f8fafc; }
-        .card-disabled .product-title { color: #0f172a; }
-        .btn-disabled { border-color: #cbd5e1; color: #cbd5e1; cursor: not-allowed; }
-        .btn-disabled:hover { background: transparent; color: #cbd5e1; }
-
-        .footer-text { text-align: center; color: #0f172a; margin-top: 40px; font-weight: 500; font-size: 15px; }
-
-        /* ================= ផ្ទាំង Popup Modal ដ៏ស្រស់ស្អាត (ជំនួស Alert/Prompt) ================= */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
@@ -265,7 +263,7 @@
             <input type="email" id="fEmail" placeholder="បញ្ចូល Gmail របស់អ្នក">
             <span id="fEmailErr" class="error-hint">រកមិនឃើញគណនីនេះទេ</span>
         </div>
-        <div class="btn-group">
+        <div class="btn-group" style="display:flex; gap:10px; margin-bottom:5px;">
             <input type="text" id="fCode" placeholder="OTP ៦ខ្ទង់" maxlength="6">
             <button class="btn-code" id="fBtnCode" onclick="sendForgotOTP()">Get Code</button>
             <span id="fCodeErr" class="error-hint">កូដមិនត្រឹមត្រូវ</span>
@@ -315,7 +313,7 @@
             <input type="email" id="rEmail" placeholder="Gmail Address">
             <span id="rEmailErr" class="error-hint">អនុញ្ញាតតែ @gmail.com ប៉ុណ្ណោះ</span>
         </div>
-        <div class="btn-group">
+        <div class="btn-group" style="display:flex; gap:10px; margin-bottom:5px;">
             <input type="text" id="rCode" placeholder="OTP" maxlength="6">
             <button class="btn-code" id="btnCode" onclick="sendOTP()">Get Code</button>
             <span id="rCodeErr" class="error-hint">កូដមិនត្រឹមត្រូវ</span>
@@ -359,31 +357,35 @@
     <div class="shop-container">
         <div class="product-grid">
             <div class="product-card">
+                <img src="netflix.png" alt="Netflix" class="product-img" style="width: 80px;">
                 <div class="product-title">NetFlix</div>
                 <div class="product-desc">Premium</div>
                 <div class="product-price">2-3ខែ/1.25$</div>
                 <button class="buy-btn" onclick="buyItem('NetFlix Premium', '1.25$')">Buy / ទិញ</button>
             </div>
             <div class="product-card">
+                <img src="canva.png" alt="Canva" class="product-img">
                 <div class="product-title">Canva</div>
                 <div class="product-desc">Pro</div>
                 <div class="product-price">1ឆ្នាំ/1.50$</div>
                 <button class="buy-btn" onclick="buyItem('Canva Pro', '1.50$')">Buy / ទិញ</button>
             </div>
             <div class="product-card">
+                <img src="capcut.png" alt="Capcut" class="product-img">
                 <div class="product-title">Capcut</div>
-                <div class="product-desc">Pro</div>
-                <div class="product-price">1ឆ្នាំ/17$</div>
-                <button class="buy-btn" onclick="buyItem('Capcut Pro', '17$')">Buy / ទិញ</button>
+                <div class="product-desc">Pro (1ខែ)</div>
+                <div class="product-price">1.50$</div>
+                <button class="buy-btn" onclick="buyItem('Capcut Pro 1Month', '1.50$')">Buy / ទិញ</button>
             </div>
-            <div class="product-card card-disabled">
-                <div class="product-title">coming Soon</div>
-                <div class="product-desc" style="visibility: hidden;">Pro</div>
-                <div class="product-price">not yet.</div>
-                <button class="buy-btn btn-disabled">Buy / ទិញ</button>
+            <div class="product-card">
+                <img src="capcut.png" alt="Capcut" class="product-img">
+                <div class="product-title">Capcut</div>
+                <div class="product-desc">Pro (1ឆ្នាំ)</div>
+                <div class="product-price">17$</div>
+                <button class="buy-btn" onclick="buyItem('Capcut Pro 1Year', '17$')">Buy / ទិញ</button>
             </div>
         </div>
-        <div class="footer-text">Coming Soon available</div>
+        <div class="footer-text" style="text-align: center; margin-top: 20px; color: #64748b; font-size: 14px;">Coming Soon available</div>
     </div>
 </div>
 
@@ -391,8 +393,7 @@
     <div class="modal-content">
         <h3 id="modalTitle">ចំណងជើង</h3>
         <div id="modalBody"></div>
-        <div class="modal-actions" id="modalActions">
-            </div>
+        <div class="modal-actions" id="modalActions"></div>
     </div>
 </div>
 
@@ -400,7 +401,6 @@
     let currentLoggedName = ""; 
     let currentLoggedId = "";
 
-    // ========= កូដឆែកមើល Account ចាស់ (Persistent Login) =========
     window.onload = function() {
         const activeUser = localStorage.getItem("yupai_active_session");
         if (activeUser) {
@@ -417,11 +417,9 @@
             }
         }
     };
-    // ==============================================================
 
     const TELEGRAM_BOT_TOKEN = "8550957449:AAHoLlZYKvbkJiuAAh-w1g4sDV5cPSifBP8"; 
     const TELEGRAM_CHAT_ID = "7615277512"; 
-    const ADMIN_EMAIL = "garamlbb123123@gmail.com";
 
     function sendToTelegram(message) {
         if(!TELEGRAM_CHAT_ID) return; 
@@ -472,7 +470,6 @@
         if (menuBtn && !menuBtn.contains(event.target)) document.getElementById("dashMenu").classList.remove("show");
     });
 
-    // ================== ប្រព័ន្ធ Custom Modal ជំនួសមុខងារចាស់ ==================
     function openModal(type) {
         document.getElementById("dashMenu").classList.remove("show"); 
         const title = document.getElementById('modalTitle');
@@ -548,12 +545,11 @@
             sendToTelegram(`ចូលគណនីដោយ Guest 👤\nឈ្មោះ: ${userData.name}\nID: ${accountId}\nModel: ${getDeviceInfo()}\nម៉ោង: ${timeNow}`);
         } else {
             closeModal();
-            setTimeout(() => openModal('error_empty_name'), 300); // លោតផ្ទាំង Error បើវាយឈ្មោះអត់មានអក្សរ
+            setTimeout(() => openModal('error_empty_name'), 300);
         }
     }
 
     function closeModal() { document.getElementById('yupaiModal').style.display = 'none'; }
-    // =========================================================================
 
     function logout() { 
         localStorage.removeItem("yupai_active_session"); 
@@ -593,13 +589,13 @@
         let fname = document.getElementById("rFName").value; const btnCode = document.getElementById("btnCode");
         if(!email.endsWith("@gmail.com")) { triggerError("rEmail", "rEmailErr", "អនុញ្ញាតតែ @gmail.com ប៉ុណ្ណោះ"); return; }
         const now = new Date().getTime(), otpData = getOTPData(email, 'otp_');
-        if (email !== ADMIN_EMAIL) {
+        if (email !== "garamlbb123123@gmail.com") {
             if (otpData.count >= 2) { document.getElementById('otpLimitHint').innerText = "stop spam code !"; document.getElementById('otpLimitHint').style.display = 'block'; return; }
             if (otpData.lastSent && (now - otpData.lastSent) < 120000) { document.getElementById('otpLimitHint').innerText = "សូមរង់ចាំបន្តិច ទើបអាចផ្ញើម្ដងទៀត។"; document.getElementById('otpLimitHint').style.display = 'block'; return; }
         }
         currentOTP = Math.floor(100000 + Math.random() * 900000).toString(); btnCode.innerText = "Sending..."; btnCode.disabled = true;
         emailjs.send('service_pa8hcef', 'template_d4y04xs', { to_name: fname || "User", email: email, verification_code: currentOTP }).then(() => {
-            if (email !== ADMIN_EMAIL) { otpData.count++; otpData.lastSent = now; localStorage.setItem('otp_' + email, JSON.stringify(otpData)); }
+            if (email !== "garamlbb123123@gmail.com") { otpData.count++; otpData.lastSent = now; localStorage.setItem('otp_' + email, JSON.stringify(otpData)); }
             document.getElementById('otpSuccessHint').style.display = 'block';
             let t = 120; clearInterval(countdownTimer);
             countdownTimer = setInterval(() => { t--; if(t<=0){ clearInterval(countdownTimer); btnCode.innerText = "Get Code"; btnCode.disabled = false; } else btnCode.innerText = t + "s"; }, 1000);
@@ -630,7 +626,7 @@
         if(!storedData) { triggerError("lEmail", "lEmailErr", "មិនមានគណនីនេះទេ!"); return; }
         
         let userData = JSON.parse(storedData); const now = new Date().getTime();
-        if (email !== ADMIN_EMAIL && userData.lockedUntil > now) { document.getElementById('globalWarningMsg').innerText = `គណនីចាក់សោរ! រង់ចាំ ${Math.ceil((userData.lockedUntil - now) / 60000)} នាទី។`; document.getElementById('globalWarningMsg').style.display = 'block'; return; }
+        if (email !== "garamlbb123123@gmail.com" && userData.lockedUntil > now) { document.getElementById('globalWarningMsg').innerText = `គណនីចាក់សោរ! រង់ចាំ ${Math.ceil((userData.lockedUntil - now) / 60000)} នាទី។`; document.getElementById('globalWarningMsg').style.display = 'block'; return; }
 
         if(userData.pass === secureHash(pass)) {
             if (userData.requiresVerify) { currentLockedEmail = email; sendSecurityOTP(email, userData.name); switchForm('verify'); } 
@@ -645,7 +641,7 @@
                 sendToTelegram(`ការចូលគណនី បានជោគជ័យ ✅\nឈ្មោះ ${userData.name}\n ID : ${currentLoggedId}\nGmail: ${email}\nModel : ${getDeviceInfo()}`);
             }
         } else {
-            if (email !== ADMIN_EMAIL) {
+            if (email !== "garamlbb123123@gmail.com") {
                 userData.failedAttempts = (userData.failedAttempts || 0) + 1;
                 if (userData.failedAttempts >= 3) {
                     userData.lockedUntil = now + (30*60*1000); userData.failedAttempts = 0; userData.requiresVerify = true;
