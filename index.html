@@ -133,7 +133,7 @@
 
         .game-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-            border: 1px solid var(--glass-border-light);
+            border: 1px solid rgba(50, 215, 75, 0.4);
             border-radius: 24px;
             padding: 14px;
             text-align: center;
@@ -152,37 +152,22 @@
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
         }
 
-        /* ═══════════════════ GAME ICON BOX (FIXED - NO GAP) ═══════════════════ */
+        /* ═══════════════════ GAME ICON BOX (NO GAP) ═══════════════════ */
         .game-icon-box {
             width: 100%;
             aspect-ratio: 1/1;
-            background: linear-gradient(135deg, rgba(50, 215, 75, 0.08), rgba(50, 215, 75, 0.01));
-            border-radius: 18px; /* កោងជ្រុងនៅត្រង់នេះ */
+            border-radius: 18px; /* កម្រិតកោងជ្រុង */
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             position: relative;
-            overflow: hidden; /* កាត់រូបដែលលៀនចេញ */
-            border: 1px solid var(--glass-border-light);
-            transition: all 0.3s ease;
-            /* padding: 8px;  <--- ដកគម្លាតនេះចេញ */
+            overflow: hidden; /* សំខាន់បំផុត វានឹងកាត់រូបណាដែលលៀនចេញពីជ្រុងកោង */
+            background: transparent; /* ដកពណ៌ background ខាងក្រោយចេញ */
         }
 
         .game-icon-box img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* <--- ដាក់ cover ដើម្បីអោយរូបលាតពេញ */
-            /* border-radius: 16px; <--- ដកចេញ ទុកអោយប្រអប់ parent កាត់ជ្រុងជំនួស */
-        }
-
-        .game-icon-box::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
-            border-radius: 18px;
-            pointer-events: none;
+            object-fit: cover; /* ធានាថារូបពេញប្រអប់ ១០០% */
+            display: block; /* បំបាត់គម្លាតតូចៗខាងក្រោមរូប */
         }
 
         .game-title {
@@ -424,59 +409,42 @@
             }
         }
 
-        // iPhone Click Sound - ពិតប្រាកដ 100%
         function playClickSound() {
             if (!soundEnabled) return;
             initAudio();
             const now = audioContext.currentTime;
-            
-            // Main click tone
             const osc = audioContext.createOscillator();
             const gain = audioContext.createGain();
-            
             osc.connect(gain);
             gain.connect(audioContext.destination);
-            
-            // iPhone frequency curve
             osc.frequency.setValueAtTime(1500, now);
             osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
-            
-            // Volume envelope
             gain.gain.setValueAtTime(0.4, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-            
             osc.start(now);
             osc.stop(now + 0.08);
             
-            // Harmonic resonance
             const osc2 = audioContext.createOscillator();
             const gain2 = audioContext.createGain();
-            
             osc2.connect(gain2);
             gain2.connect(audioContext.destination);
-            
             osc2.frequency.setValueAtTime(3000, now);
             osc2.frequency.exponentialRampToValueAtTime(1500, now + 0.06);
-            
             gain2.gain.setValueAtTime(0.15, now);
             gain2.gain.exponentialRampToValueAtTime(0, now + 0.06);
-            
             osc2.start(now);
             osc2.stop(now + 0.06);
         }
 
-        // iPhone Success Sound - 2 Beeps
         function playSuccessSound() {
             if (!soundEnabled) return;
             initAudio();
             const now = audioContext.currentTime;
             
-            // First beep (lower)
             const osc1 = audioContext.createOscillator();
             const gain1 = audioContext.createGain();
             osc1.connect(gain1);
             gain1.connect(audioContext.destination);
-            
             osc1.frequency.setValueAtTime(1000, now);
             osc1.frequency.exponentialRampToValueAtTime(800, now + 0.08);
             gain1.gain.setValueAtTime(0.35, now);
@@ -484,12 +452,10 @@
             osc1.start(now);
             osc1.stop(now + 0.08);
             
-            // Second beep (higher) - delayed
             const osc2 = audioContext.createOscillator();
             const gain2 = audioContext.createGain();
             osc2.connect(gain2);
             gain2.connect(audioContext.destination);
-            
             osc2.frequency.setValueAtTime(1500, now + 0.1);
             osc2.frequency.exponentialRampToValueAtTime(1200, now + 0.18);
             gain2.gain.setValueAtTime(0.35, now + 0.1);
@@ -498,24 +464,18 @@
             osc2.stop(now + 0.18);
         }
 
-        // iPhone Error Sound
         function playErrorSound() {
             if (!soundEnabled) return;
             initAudio();
             const now = audioContext.currentTime;
-            
             const osc = audioContext.createOscillator();
             const gain = audioContext.createGain();
             osc.connect(gain);
             gain.connect(audioContext.destination);
-            
-            // Low frequency error buzz
             osc.frequency.setValueAtTime(400, now);
             osc.frequency.exponentialRampToValueAtTime(200, now + 0.15);
-            
             gain.gain.setValueAtTime(0.35, now);
             gain.gain.exponentialRampToValueAtTime(0, now + 0.15);
-            
             osc.start(now);
             osc.stop(now + 0.15);
         }
@@ -547,7 +507,6 @@
                 island.classList.add('expand');
             }, 100);
 
-            // Auto hide after 8 seconds
             setTimeout(() => {
                 island.classList.remove('expand');
                 setTimeout(() => {
@@ -561,7 +520,6 @@
             playClickSound();
             showToast(`ជ្រើសរើស ${shortName}`, 'success');
             
-            // Show Dynamic Island with random OTP
             setTimeout(() => {
                 const otp = Math.floor(100000 + Math.random() * 900000).toString();
                 showDynamicIsland(otp);
