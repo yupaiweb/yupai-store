@@ -11,16 +11,15 @@
         :root {
             --bg-main: #0a0a0a;
             --bg-secondary: #141415;
-            --bg-card: #1a1a1e;
+            --bg-card: #1c1c1e;
             --bg-input: #252529;
             --text-primary: #ffffff;
             --text-secondary: #8e8e93;
             --accent-green: #32d74b;
             --accent-green-light: #51ff5f;
-            --accent-green-glow: rgba(50, 215, 75, 0.5);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --glass-border-light: rgba(255, 255, 255, 0.08);
-            --error-red: #ff453a;
+            --accent-red: #ff453a;
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-border-light: rgba(255, 255, 255, 0.05);
         }
 
         * {
@@ -32,13 +31,14 @@
         }
 
         html, body {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1e 100%);
+            background: var(--bg-main);
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
             max-width: 500px;
             margin: 0 auto;
             width: 100%;
+            position: relative;
         }
 
         /* ═══════════════════ HEADER ═══════════════════ */
@@ -47,14 +47,13 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 18px;
-            background: rgba(20, 20, 21, 0.6);
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
-            border-bottom: 1px solid var(--glass-border);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border-light);
             position: sticky;
             top: 0;
             z-index: 100;
-            transition: all 0.3s ease;
         }
 
         .logo {
@@ -64,163 +63,266 @@
             background: linear-gradient(135deg, #ffffff, var(--accent-green));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         /* ═══════════════════ CONTAINER ═══════════════════ */
         .container {
-            padding: 12px;
-            padding-bottom: 20px;
+            padding: 15px;
+            padding-bottom: 100px; /* ទុកចន្លោះឱ្យ Bottom Bar */
         }
 
-        /* ═══════════════════ BANNER ═══════════════════ */
-        .banner-wrapper {
-            width: 100%;
-            height: 180px;
-            border-radius: 28px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 12px 45px rgba(50, 215, 75, 0.2);
-        }
-
-        .banner-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .banner-container::-webkit-scrollbar { display: none; }
-
-        .banner-slide {
-            flex: 0 0 100%;
-            width: 100%;
-            height: 100%;
-            scroll-snap-align: start;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: 800;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
-            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-            color: white;
-        }
-
-        .banner-slide::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(50, 215, 75, 0.15));
-            pointer-events: none;
-        }
-
-        /* ═══════════════════ GAME GRID ═══════════════════ */
+        /* ═══════════════════ HOME VIEW ═══════════════════ */
         .game-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 14px;
-            padding-bottom: 20px;
         }
 
         .game-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
             border: 1px solid rgba(50, 215, 75, 0.4);
-            border-radius: 24px;
-            padding: 14px;
+            border-radius: 20px;
+            padding: 12px;
             text-align: center;
-            overflow: hidden;
-            position: relative;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            cursor: pointer;
-            
             display: flex;
             flex-direction: column;
-            height: 100%;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
+        .game-card:active { transform: scale(0.96); }
 
-        .game-card:hover {
-            border-color: var(--accent-green);
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(50, 215, 75, 0.3);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
-        }
-
-        /* ═══════════════════ GAME ICON BOX ═══════════════════ */
         .game-icon-box {
             width: 100%;
             aspect-ratio: 1/1;
-            border-radius: 18px; 
+            border-radius: 16px; 
             margin-bottom: 12px;
-            position: relative;
             overflow: hidden; 
-            background: transparent; 
         }
+        .game-icon-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        .game-icon-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
-            display: block; 
-        }
-
-        /* ═══════════════════ GAME TITLE ═══════════════════ */
         .game-title {
             font-size: 0.75rem; 
             font-weight: 800;
-            margin-bottom: 12px;
-            letter-spacing: 0px;
-            color: var(--text-primary);
-            
+            margin-bottom: 10px;
             white-space: nowrap; 
             overflow: hidden;
             text-overflow: ellipsis; 
-            
-            width: 100%;
-            text-align: center;
         }
 
-        /* ═══════════════════ BUTTON ═══════════════════ */
         .topup-btn {
             width: 100%;
-            padding: 11px 0;
+            padding: 10px 0;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--accent-green), #28c542);
+            border-radius: 10px;
+            background: var(--accent-green);
             color: #000;
             font-weight: 900;
             font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
             margin-top: auto;
         }
 
-        .topup-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255, 255, 255, 0.2);
-            opacity: 0;
-            transition: opacity 0.3s;
+        /* ═══════════════════ TOPUP VIEW ═══════════════════ */
+        .view-section {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .topup-btn:active {
-            transform: scale(0.92);
-            box-shadow: 0 0 35px var(--accent-green-glow);
-            filter: brightness(1.2);
+        .back-btn {
+            background: var(--bg-card);
+            color: #fff;
+            border: 1px solid var(--glass-border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Game Header */
+        .game-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border-light);
+            margin-bottom: 15px;
+        }
+        .game-detail-header img { width: 60px; height: 60px; border-radius: 14px; object-fit: cover; }
+        .game-detail-header h2 { font-size: 1rem; color: var(--accent-green); margin-bottom: 4px; }
+        .game-detail-header p { font-size: 0.7rem; color: var(--text-secondary); line-height: 1.4; }
+
+        /* Sections */
+        .box-section {
+            background: var(--bg-card);
+            padding: 18px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border-light);
+            margin-bottom: 15px;
+        }
+        .box-section h3 {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* Inputs Stacked vertically */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            background: var(--bg-input);
+            border: 1px solid transparent;
+            color: white;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .input-group input:focus { outline: none; border-color: var(--accent-green); background: #1a1a1c; }
+
+        /* Package Grid - 2 Columns */
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        /* Package Card */
+        .package-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
+            border: 1px solid var(--glass-border-light);
+            border-radius: 16px;
+            padding: 12px 10px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+            overflow: hidden;
+        }
+        .package-card.selected {
+            border-color: var(--accent-green);
+            background: rgba(50, 215, 75, 0.1);
+        }
+
+        .pkg-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+        .pkg-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 5px;
+        }
+
+        .pkg-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+            width: 100%;
+        }
+
+        .pkg-price {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--accent-green);
+            margin-bottom: 2px;
+        }
+
+        .pkg-desc {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Badge for x2 */
+        .pkg-badge {
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            font-size: 0.55rem;
+            color: var(--accent-red);
+            font-style: italic;
+            font-weight: 800;
+        }
+
+        /* ═══════════════════ STICKY BOTTOM BAR (BUY) ═══════════════════ */
+        .checkout-bar {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: rgba(20, 20, 21, 0.95);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid var(--accent-green);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-radius: 25px 25px 0 0;
+            transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 -5px 30px rgba(50, 215, 75, 0.15);
+        }
+        .checkout-bar.show {
+            bottom: 0;
+        }
+
+        .checkout-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .checkout-name {
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .checkout-price {
+            color: var(--accent-green);
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+
+        .buy-btn {
+            background: var(--accent-green);
+            color: #000;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .buy-btn:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
@@ -232,75 +334,350 @@
         <div class="logo">YUPAI STORE</div>
     </header>
 
-    <div class="container" id="homePage">
-        <div class="banner-wrapper">
-            <div class="banner-container" id="bannerSlider">
-                <div class="banner-slide" style="background-image: url('v1.png'); background-size: cover; background-position: center;"></div>
-                <div class="banner-slide" style="background-image: url('v2.png'); background-size: cover; background-position: center;"></div>
-                <div class="banner-slide" style="background-image: url('v3.png'); background-size: cover; background-position: center;"></div>
+    <div class="container">
+
+        <div id="homeView" class="view-section">
+            <div class="game-grid">
+                <div class="game-card" onclick="openTopup()">
+                    <div class="game-icon-box"><img src="MLBB.png" alt="MLBB"></div>
+                    <div class="game-title">MOBILE LEGENDS</div>
+                    <button class="topup-btn">TOPUP</button>
+                </div>
+                
+                <div class="game-card" onclick="playCustomSound()">
+                    <div class="game-icon-box"><img src="FF.png" alt="FF"></div>
+                    <div class="game-title">FREE FIRE</div>
+                    <button class="topup-btn">TOPUP</button>
+                </div>
+                
+                <div class="game-card" onclick="playCustomSound()">
+                    <div class="game-icon-box"><img src="HOK.png" alt="HOK"></div>
+                    <div class="game-title">HONOR OF KINGS</div>
+                    <button class="topup-btn">TOPUP</button>
+                </div>
+                
+                <div class="game-card" onclick="playCustomSound()">
+                    <div class="game-icon-box"><img src="MCGG.png" alt="MCGG"></div>
+                    <div class="game-title">MAGIC CHESS: GO GO</div>
+                    <button class="topup-btn">TOPUP</button>
+                </div>
             </div>
         </div>
 
-        <div class="game-grid">
-            <div class="game-card" onclick="selectGame('MOBILE LEGENDS')">
-                <div class="game-icon-box">
-                    <img src="MLBB.png" alt="MLBB">
+        <div id="topupView" class="view-section" style="display: none;">
+            <button class="back-btn" onclick="goHome()">
+                <span>⬅</span> ត្រឡប់ក្រោយ
+            </button>
+
+            <div class="game-detail-header">
+                <img src="MLBB.png" alt="MLBB">
+                <div>
+                    <h2>បញ្ចូលពេជ្រ Mobile Legends</h2>
+                    <p>ពេជ្រទទួលស្គាល់ពីក្រុមហ៊ុន<br>សុវត្ថិភាពដល់ Account ដាក់ភ្លាមបានភ្លាម</p>
                 </div>
-                <div class="game-title">MOBILE LEGENDS</div>
-                <button class="topup-btn">TOPUP</button>
             </div>
-            <div class="game-card" onclick="selectGame('FREE FIRE')">
-                <div class="game-icon-box">
-                    <img src="FF.png" alt="FF">
+
+            <div class="box-section">
+                <h3>បញ្ចូល User ID</h3>
+                <div class="input-group">
+                    <input type="number" placeholder="User ID">
+                    <input type="number" placeholder="Server ID">
                 </div>
-                <div class="game-title">FREE FIRE</div>
-                <button class="topup-btn">TOPUP</button>
             </div>
-            <div class="game-card" onclick="selectGame('HONOR OF KINGS')">
-                <div class="game-icon-box">
-                    <img src="HOK.png" alt="HOK">
+
+            <div class="box-section">
+                <h3>ជ្រើសរើសកញ្ចប់ ពេជ្រ</h3>
+                <div class="package-grid">
+                    
+                    <div class="package-card" onclick="selectPackage(this, 'WeeklyPass X1', '$1.49')">
+                        <div class="pkg-img"><img src="WeeklyPass.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$1.49</div>
+                            <div class="pkg-desc">WeeklyPass X1</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, 'WeeklyPass x2', '$2.98')">
+                        <div class="pkg-img"><img src="WeeklyPass.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$2.98</div>
+                            <div class="pkg-desc">WeeklyPass x2</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, 'WeeklyPass X3', '$4.47')">
+                        <div class="pkg-img"><img src="WeeklyPass.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$4.47</div>
+                            <div class="pkg-desc">WeeklyPass X3</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '50+50 Diamonds', '$0.90')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-badge">ពេជ្រ X2</div>
+                            <div class="pkg-price">$0.90</div>
+                            <div class="pkg-desc">50+50 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '150+150 Diamonds', '$2.39')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-badge">ពេជ្រ X2</div>
+                            <div class="pkg-price">$2.39</div>
+                            <div class="pkg-desc">150+150 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '250+250 Diamonds', '$3.79')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-badge">ពេជ្រ X2</div>
+                            <div class="pkg-price">$3.79</div>
+                            <div class="pkg-desc">250+250 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '500+500 Diamonds', '$7.59')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-badge">ពេជ្រ X2</div>
+                            <div class="pkg-price">$7.59</div>
+                            <div class="pkg-desc">500+500 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '22 Diamonds', '$0.45')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$0.45</div>
+                            <div class="pkg-desc">22 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '55 Diamonds', '$0.79')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$0.79</div>
+                            <div class="pkg-desc">55 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '86 Diamonds', '$1.25')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$1.25</div>
+                            <div class="pkg-desc">86 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '110 Diamonds', '$1.79')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$1.79</div>
+                            <div class="pkg-desc">110 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '165 Diamonds', '$2.39')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$2.39</div>
+                            <div class="pkg-desc">165 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '257 Diamonds', '$3.49')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$3.49</div>
+                            <div class="pkg-desc">257 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '343 Diamonds', '$4.75')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$4.75</div>
+                            <div class="pkg-desc">343 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '429 Diamonds', '$5.85')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$5.85</div>
+                            <div class="pkg-desc">429 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '514 Diamonds', '$6.99')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$6.99</div>
+                            <div class="pkg-desc">514 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '565 Diamonds', '$7.49')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$7.49</div>
+                            <div class="pkg-desc">565 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '600 Diamonds', '$8.39')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$8.39</div>
+                            <div class="pkg-desc">600 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '706 Diamonds', '$9.69')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$9.69</div>
+                            <div class="pkg-desc">706 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '878 Diamonds', '$11.69')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$11.69</div>
+                            <div class="pkg-desc">878 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '963 Diamonds', '$13.29')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$13.29</div>
+                            <div class="pkg-desc">963 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '1049 Diamonds', '$14.59')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$14.59</div>
+                            <div class="pkg-desc">1049 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '1135 Diamonds', '$15.69')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$15.69</div>
+                            <div class="pkg-desc">1135 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '1220 Diamonds', '$16.69')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$16.69</div>
+                            <div class="pkg-desc">1220 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '1412 Diamonds', '$18.89')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$18.89</div>
+                            <div class="pkg-desc">1412 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '1584 Diamonds', '$21.69')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$21.69</div>
+                            <div class="pkg-desc">1584 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '1755 Diamonds', '$23.69')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$23.69</div>
+                            <div class="pkg-desc">1755 Diamonds</div>
+                        </div>
+                    </div>
+
+                    <div class="package-card" onclick="selectPackage(this, '2195 Diamonds', '$29.29')">
+                        <div class="pkg-img"><img src="Diamond.png"></div>
+                        <div class="pkg-info">
+                            <div class="pkg-price">$29.29</div>
+                            <div class="pkg-desc">2195 Diamonds</div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="game-title">HONOR OF KINGS</div>
-                <button class="topup-btn">TOPUP</button>
-            </div>
-            <div class="game-card" onclick="selectGame('MAGIC CHESS')">
-                <div class="game-icon-box">
-                    <img src="MCGG.png" alt="CHESS">
-                </div>
-                <div class="game-title">MAGIC CHESS: GO GO</div>
-                <button class="topup-btn">TOPUP</button>
-            </div>
-            <div class="game-card" onclick="selectGame('BLOOD STRIKE')">
-                <div class="game-icon-box">
-                    <img src="STRIKE.png" alt="STRIKE">
-                </div>
-                <div class="game-title">BLOOD STRIKE</div>
-                <button class="topup-btn">TOPUP</button>
-            </div>
-            <div class="game-card" onclick="selectGame('PUBG MOBILE')">
-                <div class="game-icon-box">
-                    <img src="PUBG.png" alt="PUBG">
-                </div>
-                <div class="game-title">PUBG MOBILE</div>
-                <button class="topup-btn">TOPUP</button>
             </div>
         </div>
+
+    </div>
+
+    <div class="checkout-bar" id="checkoutBar">
+        <div class="checkout-details">
+            <span class="checkout-name" id="selectedName">XXXXXX</span>
+            <span class="checkout-price" id="selectedPrice">0.00$</span>
+        </div>
+        <button class="buy-btn" onclick="playCustomSound()">Buy</button>
     </div>
 
     <script>
-        /* ═══════════════════ AUDIO SYSTEM ═══════════════════ */
         const clickSound = document.getElementById('clickSound');
+        const homeView = document.getElementById('homeView');
+        const topupView = document.getElementById('topupView');
+        const checkoutBar = document.getElementById('checkoutBar');
+        
+        const selectedNameText = document.getElementById('selectedName');
+        const selectedPriceText = document.getElementById('selectedPrice');
 
+        // Function ចាក់សំឡេង MP3
         function playCustomSound() {
             clickSound.currentTime = 0; 
-            clickSound.play().catch(e => console.log("Audio play failed:", e));
+            clickSound.play().catch(e => console.log("Audio Error:", e));
         }
 
-        /* ═══════════════════ GAME SELECTION ═══════════════════ */
-        function selectGame(gameName) {
-            playCustomSound(); 
-            // អាចបន្ថែមមុខងារលោតទៅកាន់ទំព័រទូទាត់ប្រាក់នៅត្រង់នេះនៅពេលក្រោយ
-            // ឧទាហរណ៍: window.location.href = `topup.html?game=${gameName}`;
+        // បើកទំព័រទូទាត់ប្រាក់
+        function openTopup() {
+            playCustomSound();
+            homeView.style.display = 'none';
+            topupView.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ត្រឡប់ទៅទំព័រដើមវិញ
+        function goHome() {
+            playCustomSound();
+            topupView.style.display = 'none';
+            homeView.style.display = 'block';
+            checkoutBar.classList.remove('show'); // លាក់របារទិញ
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // មុខងារពេលចុចជ្រើសរើសកញ្ចប់ពេជ្រ
+        function selectPackage(element, name, price) {
+            playCustomSound();
+            
+            // លុបពណ៌ចាស់ចេញពីគ្រប់កាត
+            let cards = document.querySelectorAll('.package-card');
+            cards.forEach(card => card.classList.remove('selected'));
+            
+            // ដាក់ពណ៌កាតដែលទើបនឹងចុច
+            element.classList.add('selected');
+
+            // អាប់ដេតទិន្នន័យលើ Bottom Bar រួចបង្ហាញវាឡើង
+            selectedNameText.textContent = name;
+            selectedPriceText.textContent = price;
+            checkoutBar.classList.add('show');
         }
     </script>
 
