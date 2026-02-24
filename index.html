@@ -11,7 +11,7 @@
         :root {
             --bg-main: #0a0a0a;
             --bg-secondary: #141415;
-            --bg-card: #151518;
+            --bg-card: #1a1a1e;
             --bg-input: #252529;
             --text-primary: #ffffff;
             --text-secondary: #8e8e93;
@@ -123,82 +123,109 @@
             pointer-events: none;
         }
 
-        /* ═══════════════════ GAME GRID ═══════════════════ */
+        /* ═══════════════════ GAME GRID (BENTO) ═══════════════════ */
         .game-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            gap: 14px;
             padding-bottom: 20px;
         }
 
         .game-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(50, 215, 75, 0.4); /* Green Border Like HOK Pic */
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            border: 1px solid var(--glass-border-light);
             border-radius: 24px;
             padding: 14px;
             text-align: center;
+            overflow: hidden;
             position: relative;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             cursor: pointer;
         }
 
         .game-card:hover {
             border-color: var(--accent-green);
-            transform: translateY(-6px);
-            box-shadow: 0 15px 35px rgba(50, 215, 75, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(50, 215, 75, 0.3);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
         }
 
-        /* ═══════════════════ GAME ICON BOX ═══════════════════ */
+        /* ═══════════════════ GAME ICON BOX (FIXED - NO GAP) ═══════════════════ */
         .game-icon-box {
             width: 100%;
             aspect-ratio: 1/1;
-            background: linear-gradient(135deg, #2c2c35, #1e1e24); /* Placeholder Background */
-            border-radius: 18px;
-            margin-bottom: 14px;
+            background: linear-gradient(135deg, rgba(50, 215, 75, 0.08), rgba(50, 215, 75, 0.01));
+            border-radius: 18px; /* កោងជ្រុងនៅត្រង់នេះ */
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden;
+            overflow: hidden; /* កាត់រូបដែលលៀនចេញ */
+            border: 1px solid var(--glass-border-light);
+            transition: all 0.3s ease;
+            /* padding: 8px;  <--- ដកគម្លាតនេះចេញ */
         }
 
         .game-icon-box img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Makes image fill the box perfectly */
+            object-fit: cover; /* <--- ដាក់ cover ដើម្បីអោយរូបលាតពេញ */
+            /* border-radius: 16px; <--- ដកចេញ ទុកអោយប្រអប់ parent កាត់ជ្រុងជំនួស */
+        }
+
+        .game-icon-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
             border-radius: 18px;
+            pointer-events: none;
         }
 
         .game-title {
             font-size: 0.9rem;
             font-weight: 800;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             letter-spacing: 0.5px;
             min-height: 20px;
             color: var(--text-primary);
-            text-transform: uppercase;
         }
 
         .topup-btn {
             width: 100%;
-            padding: 12px 0;
+            padding: 11px 0;
             border: none;
-            border-radius: 14px;
-            background: var(--accent-green);
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-green), #28c542);
             color: #000;
             font-weight: 900;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topup-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .topup-btn:active {
-            transform: scale(0.95);
-            filter: brightness(1.1);
+            transform: scale(0.92);
+            box-shadow: 0 0 35px var(--accent-green-glow);
+            filter: brightness(1.2);
         }
 
-        /* ═══════════════════ DYNAMIC ISLAND ═══════════════════ */
+        /* ═══════════════════ DYNAMIC ISLAND (SMOOTH) ═══════════════════ */
         .dynamic-island {
             position: fixed;
             top: 10px;
@@ -264,17 +291,21 @@
             font-size: 1.4rem;
             letter-spacing: 6px;
             font-family: 'Courier New', monospace;
-            text-shadow: 0 0 20px rgba(50, 215, 75, 0.8);
+            text-shadow: 0 0 20px rgba(50, 215, 75, 0.8),
+                         0 0 40px rgba(50, 215, 75, 0.4);
             animation: otpGlowSmooth 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(50, 215, 75, 0.6));
         }
 
         @keyframes otpGlowSmooth {
             0%, 100% {
-                text-shadow: 0 0 15px rgba(50, 215, 75, 0.6);
+                text-shadow: 0 0 15px rgba(50, 215, 75, 0.6),
+                             0 0 30px rgba(50, 215, 75, 0.3);
                 opacity: 0.95;
             }
             50% {
-                text-shadow: 0 0 25px rgba(50, 215, 75, 0.9);
+                text-shadow: 0 0 25px rgba(50, 215, 75, 0.9),
+                             0 0 50px rgba(50, 215, 75, 0.5);
                 opacity: 1;
             }
         }
@@ -327,21 +358,16 @@
     <div class="container" id="homePage">
         <div class="banner-wrapper">
             <div class="banner-container" id="bannerSlider">
-                <div class="banner-slide" style="background-image: url('v1.png');"></div>
-                <div class="banner-slide" style="background-image: url('v2.png');"></div>
-                <div class="banner-slide" style="background-image: url('v3.png');"></div>
+                <div class="banner-slide" style="background-image: url('v1.png'); background-size: cover; background-position: center;">
+                </div>
+                <div class="banner-slide" style="background-image: url('v2.png'); background-size: cover; background-position: center;">
+                </div>
+                <div class="banner-slide" style="background-image: url('v3.png'); background-size: cover; background-position: center;">
+                </div>
             </div>
         </div>
 
         <div class="game-grid">
-            <div class="game-card" onclick="selectGame('HOK')">
-                <div class="game-icon-box">
-                    <img src="HOK.png" alt="HOK">
-                </div>
-                <div class="game-title">HONOR OF KINGS</div>
-                <button class="topup-btn">TOPUP</button>
-            </div>
-            
             <div class="game-card" onclick="selectGame('MLBB')">
                 <div class="game-icon-box">
                     <img src="MLBB.png" alt="MLBB">
@@ -349,7 +375,6 @@
                 <div class="game-title">MOBILE LEGENDS</div>
                 <button class="topup-btn">TOPUP</button>
             </div>
-            
             <div class="game-card" onclick="selectGame('FF')">
                 <div class="game-icon-box">
                     <img src="FF.png" alt="FF">
@@ -357,15 +382,20 @@
                 <div class="game-title">FREE FIRE</div>
                 <button class="topup-btn">TOPUP</button>
             </div>
-            
+            <div class="game-card" onclick="selectGame('HOK')">
+                <div class="game-icon-box">
+                    <img src="HOK.png" alt="HOK">
+                </div>
+                <div class="game-title">HONOR OF KINGS</div>
+                <button class="topup-btn">TOPUP</button>
+            </div>
             <div class="game-card" onclick="selectGame('MCGG')">
                 <div class="game-icon-box">
-                    <img src="MCGG.png" alt="MCGG">
+                    <img src="MCGG.png" alt="CHESS">
                 </div>
                 <div class="game-title">MAGIC CHESS: GO GO</div>
                 <button class="topup-btn">TOPUP</button>
             </div>
-            
             <div class="game-card" onclick="selectGame('STRIKE')">
                 <div class="game-icon-box">
                     <img src="STRIKE.png" alt="STRIKE">
@@ -373,7 +403,6 @@
                 <div class="game-title">BLOOD STRIKE</div>
                 <button class="topup-btn">TOPUP</button>
             </div>
-            
             <div class="game-card" onclick="selectGame('PUBG')">
                 <div class="game-icon-box">
                     <img src="PUBG.png" alt="PUBG">
@@ -385,7 +414,7 @@
     </div>
 
     <script>
-        /* ═══════════════════ AUDIO SYSTEM ═══════════════════ */
+        /* ═══════════════════ AUDIO SYSTEM (iPhone Sound) ═══════════════════ */
         let audioContext;
         let soundEnabled = true;
 
@@ -395,30 +424,59 @@
             }
         }
 
+        // iPhone Click Sound - ពិតប្រាកដ 100%
         function playClickSound() {
             if (!soundEnabled) return;
             initAudio();
             const now = audioContext.currentTime;
+            
+            // Main click tone
             const osc = audioContext.createOscillator();
             const gain = audioContext.createGain();
+            
             osc.connect(gain);
             gain.connect(audioContext.destination);
+            
+            // iPhone frequency curve
             osc.frequency.setValueAtTime(1500, now);
             osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+            
+            // Volume envelope
             gain.gain.setValueAtTime(0.4, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+            
             osc.start(now);
             osc.stop(now + 0.08);
+            
+            // Harmonic resonance
+            const osc2 = audioContext.createOscillator();
+            const gain2 = audioContext.createGain();
+            
+            osc2.connect(gain2);
+            gain2.connect(audioContext.destination);
+            
+            osc2.frequency.setValueAtTime(3000, now);
+            osc2.frequency.exponentialRampToValueAtTime(1500, now + 0.06);
+            
+            gain2.gain.setValueAtTime(0.15, now);
+            gain2.gain.exponentialRampToValueAtTime(0, now + 0.06);
+            
+            osc2.start(now);
+            osc2.stop(now + 0.06);
         }
 
+        // iPhone Success Sound - 2 Beeps
         function playSuccessSound() {
             if (!soundEnabled) return;
             initAudio();
             const now = audioContext.currentTime;
+            
+            // First beep (lower)
             const osc1 = audioContext.createOscillator();
             const gain1 = audioContext.createGain();
             osc1.connect(gain1);
             gain1.connect(audioContext.destination);
+            
             osc1.frequency.setValueAtTime(1000, now);
             osc1.frequency.exponentialRampToValueAtTime(800, now + 0.08);
             gain1.gain.setValueAtTime(0.35, now);
@@ -426,10 +484,12 @@
             osc1.start(now);
             osc1.stop(now + 0.08);
             
+            // Second beep (higher) - delayed
             const osc2 = audioContext.createOscillator();
             const gain2 = audioContext.createGain();
             osc2.connect(gain2);
             gain2.connect(audioContext.destination);
+            
             osc2.frequency.setValueAtTime(1500, now + 0.1);
             osc2.frequency.exponentialRampToValueAtTime(1200, now + 0.18);
             gain2.gain.setValueAtTime(0.35, now + 0.1);
@@ -438,12 +498,41 @@
             osc2.stop(now + 0.18);
         }
 
+        // iPhone Error Sound
+        function playErrorSound() {
+            if (!soundEnabled) return;
+            initAudio();
+            const now = audioContext.currentTime;
+            
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            // Low frequency error buzz
+            osc.frequency.setValueAtTime(400, now);
+            osc.frequency.exponentialRampToValueAtTime(200, now + 0.15);
+            
+            gain.gain.setValueAtTime(0.35, now);
+            gain.gain.exponentialRampToValueAtTime(0, now + 0.15);
+            
+            osc.start(now);
+            osc.stop(now + 0.15);
+        }
+
         /* ═══════════════════ TOAST SYSTEM ═══════════════════ */
-        function showToast(message, type = 'success') {
+        function showToast(message, type = 'error') {
             const toast = document.getElementById('customToast');
             document.getElementById('toastMsgText').textContent = message;
-            toast.style.borderColor = 'rgba(50, 215, 75, 0.5)';
-            playSuccessSound();
+            
+            if (type === 'error') {
+                toast.style.borderColor = 'rgba(255, 69, 58, 0.5)';
+                playErrorSound();
+            } else {
+                toast.style.borderColor = 'rgba(50, 215, 75, 0.5)';
+                playSuccessSound();
+            }
+
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3500);
         }
@@ -458,6 +547,7 @@
                 island.classList.add('expand');
             }, 100);
 
+            // Auto hide after 8 seconds
             setTimeout(() => {
                 island.classList.remove('expand');
                 setTimeout(() => {
@@ -469,8 +559,9 @@
         /* ═══════════════════ GAME SELECTION ═══════════════════ */
         function selectGame(shortName) {
             playClickSound();
-            showToast(`ជ្រើសរើស ${shortName}`);
+            showToast(`ជ្រើសរើស ${shortName}`, 'success');
             
+            // Show Dynamic Island with random OTP
             setTimeout(() => {
                 const otp = Math.floor(100000 + Math.random() * 900000).toString();
                 showDynamicIsland(otp);
