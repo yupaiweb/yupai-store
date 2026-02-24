@@ -123,7 +123,7 @@
             pointer-events: none;
         }
 
-        /* ═══════════════════ GAME GRID (BENTO) ═══════════════════ */
+        /* ═══════════════════ GAME GRID ═══════════════════ */
         .game-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -143,6 +143,10 @@
             -webkit-backdrop-filter: blur(20px);
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             cursor: pointer;
+            
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .game-card:hover {
@@ -152,33 +156,42 @@
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
         }
 
-        /* ═══════════════════ GAME ICON BOX (NO GAP) ═══════════════════ */
+        /* ═══════════════════ GAME ICON BOX ═══════════════════ */
         .game-icon-box {
             width: 100%;
             aspect-ratio: 1/1;
-            border-radius: 18px; /* កម្រិតកោងជ្រុង */
+            border-radius: 18px; 
             margin-bottom: 12px;
             position: relative;
-            overflow: hidden; /* សំខាន់បំផុត វានឹងកាត់រូបណាដែលលៀនចេញពីជ្រុងកោង */
-            background: transparent; /* ដកពណ៌ background ខាងក្រោយចេញ */
+            overflow: hidden; 
+            background: transparent; 
         }
 
         .game-icon-box img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* ធានាថារូបពេញប្រអប់ ១០០% */
-            display: block; /* បំបាត់គម្លាតតូចៗខាងក្រោមរូប */
+            object-fit: cover; 
+            display: block; 
         }
 
+        /* ═══════════════════ GAME TITLE (១ជួរទាំងអស់) ═══════════════════ */
         .game-title {
-            font-size: 0.9rem;
+            font-size: 0.75rem; /* បង្រួមអក្សរឱ្យតូចជាងមុនបន្តិច */
             font-weight: 800;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-            min-height: 20px;
+            margin-bottom: 12px;
+            letter-spacing: 0px;
             color: var(--text-primary);
+            
+            /* បង្ខំឱ្យអក្សរនៅតែ ១ជួរ */
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis; /* បើអក្សរវែងពេកលោត ... ជំនួសការធ្លាក់ចុះក្រោម */
+            
+            width: 100%;
+            text-align: center;
         }
 
+        /* ═══════════════════ BUTTON ═══════════════════ */
         .topup-btn {
             width: 100%;
             padding: 11px 0;
@@ -193,6 +206,7 @@
             letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
+            margin-top: auto;
         }
 
         .topup-btn::before {
@@ -210,7 +224,7 @@
             filter: brightness(1.2);
         }
 
-        /* ═══════════════════ DYNAMIC ISLAND (SMOOTH) ═══════════════════ */
+        /* ═══════════════════ DYNAMIC ISLAND ═══════════════════ */
         .dynamic-island {
             position: fixed;
             top: 10px;
@@ -343,12 +357,9 @@
     <div class="container" id="homePage">
         <div class="banner-wrapper">
             <div class="banner-container" id="bannerSlider">
-                <div class="banner-slide" style="background-image: url('v1.png'); background-size: cover; background-position: center;">
-                </div>
-                <div class="banner-slide" style="background-image: url('v2.png'); background-size: cover; background-position: center;">
-                </div>
-                <div class="banner-slide" style="background-image: url('v3.png'); background-size: cover; background-position: center;">
-                </div>
+                <div class="banner-slide" style="background-image: url('v1.png'); background-size: cover; background-position: center;"></div>
+                <div class="banner-slide" style="background-image: url('v2.png'); background-size: cover; background-position: center;"></div>
+                <div class="banner-slide" style="background-image: url('v3.png'); background-size: cover; background-position: center;"></div>
             </div>
         </div>
 
@@ -423,17 +434,6 @@
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
             osc.start(now);
             osc.stop(now + 0.08);
-            
-            const osc2 = audioContext.createOscillator();
-            const gain2 = audioContext.createGain();
-            osc2.connect(gain2);
-            gain2.connect(audioContext.destination);
-            osc2.frequency.setValueAtTime(3000, now);
-            osc2.frequency.exponentialRampToValueAtTime(1500, now + 0.06);
-            gain2.gain.setValueAtTime(0.15, now);
-            gain2.gain.exponentialRampToValueAtTime(0, now + 0.06);
-            osc2.start(now);
-            osc2.stop(now + 0.06);
         }
 
         function playSuccessSound() {
@@ -481,18 +481,11 @@
         }
 
         /* ═══════════════════ TOAST SYSTEM ═══════════════════ */
-        function showToast(message, type = 'error') {
+        function showToast(message, type = 'success') {
             const toast = document.getElementById('customToast');
             document.getElementById('toastMsgText').textContent = message;
-            
-            if (type === 'error') {
-                toast.style.borderColor = 'rgba(255, 69, 58, 0.5)';
-                playErrorSound();
-            } else {
-                toast.style.borderColor = 'rgba(50, 215, 75, 0.5)';
-                playSuccessSound();
-            }
-
+            toast.style.borderColor = 'rgba(50, 215, 75, 0.5)';
+            playSuccessSound();
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3500);
         }
@@ -518,7 +511,7 @@
         /* ═══════════════════ GAME SELECTION ═══════════════════ */
         function selectGame(shortName) {
             playClickSound();
-            showToast(`ជ្រើសរើស ${shortName}`, 'success');
+            showToast(`ជ្រើសរើស ${shortName}`);
             
             setTimeout(() => {
                 const otp = Math.floor(100000 + Math.random() * 900000).toString();
