@@ -3,22 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Icons</title>
+    <title>iOS Style Game App Store</title>
     <style>
-        .game-icon {
-            border-radius: 50%;
-            /* Additional styling for the icons */
-            width: 100px; /* Adjust width */
-            height: 100px; /* Adjust height */
-            overflow: hidden;
-            /* other styling properties */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            margin: 0;
+            padding: 0;
+        }
+        .app-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="game-icon"><img src="icon1.png" alt="Icon 1"></div>
-    <div class="game-icon"><img src="icon2.png" alt="Icon 2"></div>
-    <div class="game-icon"><img src="icon3.png" alt="Icon 3"></div>
-    <!-- Add more icons as needed -->
+
+    <div class="app-card">
+        <h1>Welcome to the Game App Store</h1>
+        <p>Download your favorite games and enjoy a stunning experience.</p>
+        <button class="button">Download Now</button>
+    </div>
+
 </body>
 </html>
