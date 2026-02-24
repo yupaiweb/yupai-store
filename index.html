@@ -176,16 +176,15 @@
 
         /* ═══════════════════ GAME TITLE (១ជួរទាំងអស់) ═══════════════════ */
         .game-title {
-            font-size: 0.75rem; /* បង្រួមអក្សរឱ្យតូចជាងមុនបន្តិច */
+            font-size: 0.75rem; 
             font-weight: 800;
             margin-bottom: 12px;
             letter-spacing: 0px;
             color: var(--text-primary);
             
-            /* បង្ខំឱ្យអក្សរនៅតែ ១ជួរ */
             white-space: nowrap; 
             overflow: hidden;
-            text-overflow: ellipsis; /* បើអក្សរវែងពេកលោត ... ជំនួសការធ្លាក់ចុះក្រោម */
+            text-overflow: ellipsis; 
             
             width: 100%;
             text-align: center;
@@ -339,6 +338,8 @@
 </head>
 <body>
 
+    <audio id="clickSound" src="Sound_thoch.mp3" preload="auto"></audio>
+
     <div class="custom-toast" id="customToast">
         <span id="toastMsgText">Done</span>
     </div>
@@ -410,82 +411,20 @@
     </div>
 
     <script>
-        /* ═══════════════════ AUDIO SYSTEM (iPhone Sound) ═══════════════════ */
-        let audioContext;
-        let soundEnabled = true;
+        /* ═══════════════════ AUDIO SYSTEM (Using MP3 File) ═══════════════════ */
+        const clickSound = document.getElementById('clickSound');
 
-        function initAudio() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
-        function playClickSound() {
-            if (!soundEnabled) return;
-            initAudio();
-            const now = audioContext.currentTime;
-            const osc = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            osc.connect(gain);
-            gain.connect(audioContext.destination);
-            osc.frequency.setValueAtTime(1500, now);
-            osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
-            gain.gain.setValueAtTime(0.4, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-            osc.start(now);
-            osc.stop(now + 0.08);
-        }
-
-        function playSuccessSound() {
-            if (!soundEnabled) return;
-            initAudio();
-            const now = audioContext.currentTime;
-            
-            const osc1 = audioContext.createOscillator();
-            const gain1 = audioContext.createGain();
-            osc1.connect(gain1);
-            gain1.connect(audioContext.destination);
-            osc1.frequency.setValueAtTime(1000, now);
-            osc1.frequency.exponentialRampToValueAtTime(800, now + 0.08);
-            gain1.gain.setValueAtTime(0.35, now);
-            gain1.gain.exponentialRampToValueAtTime(0, now + 0.08);
-            osc1.start(now);
-            osc1.stop(now + 0.08);
-            
-            const osc2 = audioContext.createOscillator();
-            const gain2 = audioContext.createGain();
-            osc2.connect(gain2);
-            gain2.connect(audioContext.destination);
-            osc2.frequency.setValueAtTime(1500, now + 0.1);
-            osc2.frequency.exponentialRampToValueAtTime(1200, now + 0.18);
-            gain2.gain.setValueAtTime(0.35, now + 0.1);
-            gain2.gain.exponentialRampToValueAtTime(0, now + 0.18);
-            osc2.start(now + 0.1);
-            osc2.stop(now + 0.18);
-        }
-
-        function playErrorSound() {
-            if (!soundEnabled) return;
-            initAudio();
-            const now = audioContext.currentTime;
-            const osc = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            osc.connect(gain);
-            gain.connect(audioContext.destination);
-            osc.frequency.setValueAtTime(400, now);
-            osc.frequency.exponentialRampToValueAtTime(200, now + 0.15);
-            gain.gain.setValueAtTime(0.35, now);
-            gain.gain.exponentialRampToValueAtTime(0, now + 0.15);
-            osc.start(now);
-            osc.stop(now + 0.15);
+        function playCustomSound() {
+            // Reset សំឡេងទៅដើមវិញរាល់ពេលចុច ដើម្បីកុំឱ្យវាចាំយូរទម្រាំលេងចប់ម្តងៗ
+            clickSound.currentTime = 0; 
+            clickSound.play().catch(e => console.log("Audio play failed:", e));
         }
 
         /* ═══════════════════ TOAST SYSTEM ═══════════════════ */
-        function showToast(message, type = 'success') {
+        function showToast(message) {
             const toast = document.getElementById('customToast');
             document.getElementById('toastMsgText').textContent = message;
             toast.style.borderColor = 'rgba(50, 215, 75, 0.5)';
-            playSuccessSound();
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3500);
         }
@@ -510,7 +449,7 @@
 
         /* ═══════════════════ GAME SELECTION ═══════════════════ */
         function selectGame(shortName) {
-            playClickSound();
+            playCustomSound(); // ហៅមុខងារចាក់សំឡេង MP3 មកប្រើ
             showToast(`ជ្រើសរើស ${shortName}`);
             
             setTimeout(() => {
