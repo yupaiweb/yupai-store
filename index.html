@@ -40,6 +40,35 @@
             margin: 0 auto;
             width: 100%;
             position: relative;
+            scroll-behavior: smooth;
+        }
+
+        /* ═══════════════════ ANIMATIONS (NEW) ═══════════════════ */
+        @keyframes shine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: translateY(40px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px rgba(50, 215, 75, 0.15); }
+            50% { box-shadow: 0 0 25px rgba(50, 215, 75, 0.4); }
+            100% { box-shadow: 0 0 15px rgba(50, 215, 75, 0.15); }
+        }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* ═══════════════════ HEADER ═══════════════════ */
@@ -69,10 +98,12 @@
             color: #ffffff;
         }
         .logo .game-topup {
-            background: linear-gradient(135deg, var(--accent-green), #51ff5f);
+            background: linear-gradient(135deg, var(--accent-green), #ffffff, var(--accent-green));
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-size: 0.85em;
+            animation: shine 4s linear infinite; /* Added Shine Animation */
         }
 
         /* ═══════════════════ CONTAINER ═══════════════════ */
@@ -98,16 +129,23 @@
             display: flex;
             flex-direction: column;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards; /* Pop-in Animation */
         }
+        
+        /* Staggered Delay for Cards */
+        .game-card:nth-child(1) { animation-delay: 0.1s; }
+        .game-card:nth-child(2) { animation-delay: 0.2s; }
+        .game-card:nth-child(3) { animation-delay: 0.3s; }
+        .game-card:nth-child(4) { animation-delay: 0.4s; }
+
         .game-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 25px rgba(50, 215, 75, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(50, 215, 75, 0.2);
             border-color: var(--accent-green);
         }
         .game-card:active { 
-            transform: scale(0.96); 
-            box-shadow: 0 5px 15px rgba(50, 215, 75, 0.1);
+            transform: scale(0.92); 
         }
 
         .game-icon-box {
@@ -117,7 +155,15 @@
             margin-bottom: 12px;
             overflow: hidden; 
         }
-        .game-icon-box img { width: 100%; height: 100%; object-fit: cover; }
+        .game-icon-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            animation: float 4s ease-in-out infinite; /* Floating Animation */
+        }
+
+        /* Staggered float to make them look organic */
+        .game-card:nth-child(even) .game-icon-box img { animation-delay: -2s; }
 
         .game-title {
             font-size: 0.75rem; 
@@ -138,16 +184,15 @@
             font-weight: 900;
             font-size: 0.85rem;
             margin-top: auto;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+        }
+        .game-card:hover .topup-btn {
+            box-shadow: 0 0 15px rgba(50, 215, 75, 0.5);
         }
 
         /* ═══════════════════ TOPUP VIEW ═══════════════════ */
         .view-section {
-            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .back-btn {
@@ -162,9 +207,10 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .back-btn:active { background: rgba(255, 255, 255, 0.1); transform: scale(0.95); }
+        .back-btn:hover { background: rgba(255, 255, 255, 0.1); transform: translateX(-5px); }
+        .back-btn:active { transform: scale(0.95) translateX(-5px); }
 
         .game-detail-header {
             display: flex;
@@ -175,8 +221,13 @@
             border-radius: 20px;
             border: 1px solid var(--glass-border-light);
             margin-bottom: 15px;
+            transition: transform 0.3s ease;
         }
-        .game-detail-header img { width: 60px; height: 60px; border-radius: 14px; object-fit: cover; }
+        .game-detail-header:hover { transform: scale(1.02); }
+        .game-detail-header img { 
+            width: 60px; height: 60px; border-radius: 14px; object-fit: cover;
+            animation: float 3s ease-in-out infinite; 
+        }
         .game-detail-header h2 { font-size: 1rem; color: var(--accent-green); margin-bottom: 4px; }
         .game-detail-header p { font-size: 0.7rem; color: var(--text-secondary); line-height: 1.4; }
 
@@ -208,9 +259,15 @@
             color: white;
             font-size: 0.9rem;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .input-group input:focus { outline: none; border-color: var(--accent-green); background: #1a1a1c; box-shadow: 0 0 10px rgba(50, 215, 75, 0.1); }
+        .input-group input:focus { 
+            outline: none; 
+            border-color: var(--accent-green); 
+            background: #1a1a1c; 
+            box-shadow: 0 0 15px rgba(50, 215, 75, 0.2); 
+            transform: translateY(-2px);
+        }
 
         .package-grid {
             display: grid;
@@ -228,17 +285,19 @@
             align-items: center;
             position: relative;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             overflow: hidden;
             min-height: 80px;
+            animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
         }
-        .package-card:active { transform: scale(0.97); }
+        .package-card:hover { background: rgba(255, 255, 255, 0.08); transform: translateY(-3px); }
+        .package-card:active { transform: scale(0.95); }
         
         .package-card.selected {
             border-color: var(--accent-green);
             background: rgba(50, 215, 75, 0.15);
-            box-shadow: 0 0 18px rgba(50, 215, 75, 0.15);
-            transform: translateY(-2px);
+            transform: translateY(-4px) scale(1.02);
+            animation: pulseGlow 2s infinite; /* Pulsing Animation for selected */
         }
 
         .pkg-img {
@@ -252,60 +311,19 @@
             justify-content: center;
             margin-right: 10px;
             overflow: hidden;
-            transition: transform 0.3s;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .package-card.selected .pkg-img {
-            transform: scale(1.1);
-        }
-        .pkg-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 5px;
-        }
+        .package-card:hover .pkg-img { transform: scale(1.1) rotate(5deg); }
+        .package-card.selected .pkg-img { transform: scale(1.15) rotate(10deg); }
+        
+        .pkg-img img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
 
-        .pkg-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            text-align: right;
-            width: 100%;
-            overflow: hidden; 
-        }
-
-        .pkg-subtext {
-            font-size: 0.6rem; 
-            color: var(--text-sub);
-            margin-bottom: 2px;
-            white-space: nowrap; 
-            overflow: hidden;
-            text-overflow: ellipsis; 
-            width: 100%;
-        }
-
-        .pkg-price {
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--accent-green);
-            margin-bottom: 2px;
-            transition: color 0.2s;
-        }
-
-        .pkg-desc {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .pkg-badge {
-            position: absolute;
-            top: 4px;
-            right: 8px;
-            font-size: 0.55rem;
-            color: var(--accent-red);
-            font-style: italic;
-            font-weight: 800;
-        }
+        .pkg-info { display: flex; flex-direction: column; align-items: flex-end; text-align: right; width: 100%; overflow: hidden; }
+        .pkg-subtext { font-size: 0.6rem; color: var(--text-sub); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+        .pkg-price { font-size: 1rem; font-weight: 800; color: var(--accent-green); margin-bottom: 2px; transition: color 0.3s; }
+        .package-card.selected .pkg-price { text-shadow: 0 0 10px rgba(50, 215, 75, 0.5); }
+        .pkg-desc { font-size: 0.65rem; color: var(--text-secondary); font-weight: 600; }
+        .pkg-badge { position: absolute; top: 4px; right: 8px; font-size: 0.55rem; color: var(--accent-red); font-style: italic; font-weight: 800; animation: float 2s infinite alternate; }
 
         /* ═══════════════════ STICKY BOTTOM BAR ═══════════════════ */
         .checkout-bar {
@@ -325,28 +343,18 @@
             align-items: center;
             z-index: 1000;
             border-radius: 25px 25px 0 0;
-            transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 -5px 30px rgba(50, 215, 75, 0.15);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 -5px 30px rgba(50, 215, 75, 0.2);
         }
-        .checkout-bar.show {
-            bottom: 0;
-        }
+        .checkout-bar.show { bottom: 0; }
 
-        .checkout-details {
-            display: flex;
-            flex-direction: column;
+        .checkout-details { display: flex; flex-direction: column; }
+        .checkout-name { color: #fff; font-size: 0.8rem; font-weight: 600; }
+        .checkout-price { 
+            color: var(--accent-green); font-size: 1.3rem; font-weight: 900; letter-spacing: 0.5px;
+            transition: transform 0.3s ease;
         }
-        .checkout-name {
-            color: #fff;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .checkout-price {
-            color: var(--accent-green);
-            font-size: 1.3rem;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-        }
+        .checkout-bar.pop .checkout-price { transform: scale(1.1); }
 
         .buy-btn {
             background: var(--accent-green);
@@ -358,12 +366,12 @@
             font-size: 0.95rem;
             cursor: pointer;
             text-transform: uppercase;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
         }
-        .buy-btn:active {
-            transform: scale(0.92);
-            filter: brightness(1.1);
-        }
+        .buy-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(50, 215, 75, 0.4); }
+        .buy-btn:active { transform: scale(0.9); }
 
         /* ═══════════════════ TOAST ERROR & INFO ═══════════════════ */
         .error-toast, .info-toast {
@@ -377,24 +385,14 @@
             font-weight: 600;
             font-size: 0.85rem;
             z-index: 10001;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             white-space: nowrap;
         }
 
-        .error-toast {
-            background: rgba(255, 69, 58, 0.95);
-            box-shadow: 0 10px 30px rgba(255, 69, 58, 0.3);
-        }
-        
-        .info-toast {
-            background: rgba(50, 215, 75, 0.95);
-            color: black;
-            box-shadow: 0 10px 30px rgba(50, 215, 75, 0.3);
-        }
+        .error-toast { background: rgba(255, 69, 58, 0.95); box-shadow: 0 10px 30px rgba(255, 69, 58, 0.3); }
+        .info-toast { background: rgba(50, 215, 75, 0.95); color: black; box-shadow: 0 10px 30px rgba(50, 215, 75, 0.3); }
 
-        .error-toast.show, .info-toast.show {
-            top: 50px;
-        }
+        .error-toast.show, .info-toast.show { top: 50px; }
     </style>
 </head>
 <body>
@@ -516,7 +514,7 @@
             { img: 'Diamond.png', name: '2195 Diamonds', price: '$29.45' }
         ];
 
-        // Free Fire Packages (អក្សរខ្លី "បាន...ភ្លាមៗ" ដើម្បីកុំឱ្យធ្លាក់បន្ទាត់)
+        // Free Fire Packages
         const ffPackages = [
             { img: 'WeeklyLite.png', name: 'Weekly💎Lite', price: '$0.79', subtext: 'បាន20💎ភ្លាមៗ' },
             { img: 'WeeklyLite.png', name: 'Weekly 💎Lite X3', price: '$2.25', subtext: 'បាន60💎ភ្លាមៗ' },
@@ -587,8 +585,8 @@
                     </div>
                 `;
                 inputContainer.innerHTML = `
-                    <input type="number" id="userIdInput" placeholder="User ID">
-                    <input type="number" id="serverIdInput" placeholder="Server ID">
+                    <input type="text" id="userIdInput" placeholder="User ID">
+                    <input type="text" id="serverIdInput" placeholder="Server ID">
                 `;
                 renderPackages(mlbbPackages);
             } 
@@ -601,7 +599,7 @@
                     </div>
                 `;
                 inputContainer.innerHTML = `
-                    <input type="number" id="userIdInput" placeholder="User ID">
+                    <input type="text" id="userIdInput" placeholder="User ID">
                 `;
                 renderPackages(ffPackages);
             }
@@ -612,12 +610,15 @@
         }
 
         function renderPackages(packages) {
-            packages.forEach(pkg => {
+            packages.forEach((pkg, index) => {
                 let badgeHtml = pkg.badge ? `<div class="pkg-badge">${pkg.badge}</div>` : '';
                 let subtextHtml = pkg.subtext ? `<div class="pkg-subtext">${pkg.subtext}</div>` : '';
                 
+                // Add staggered animation delay to package cards
+                let delay = index * 0.05;
+                
                 let cardHtml = `
-                    <div class="package-card" onclick="selectPackage(this, '${pkg.name}', '${pkg.price}')">
+                    <div class="package-card" style="animation-delay: ${delay}s" onclick="selectPackage(this, '${pkg.name}', '${pkg.price}')">
                         <div class="pkg-img"><img src="${pkg.img}"></div>
                         <div class="pkg-info">
                             ${badgeHtml}
@@ -661,6 +662,12 @@
                 
                 selectedNameText.textContent = `បានជ្រើសរើស: ${selectedPackages.length} កញ្ចប់`;
                 selectedPriceText.textContent = `$${total.toFixed(2)}`;
+                
+                // Add pop effect to price
+                checkoutBar.classList.remove('pop');
+                void checkoutBar.offsetWidth; // trigger reflow
+                checkoutBar.classList.add('pop');
+                
                 checkoutBar.classList.add('show');
             } else {
                 checkoutBar.classList.remove('show');
