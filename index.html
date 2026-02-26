@@ -4,71 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YUPAI STORE GAME TOPUP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Siemreap&family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+
     <style>
-        /* ═══════════════════ ROOT COLORS & THEME ═══════════════════ */
+        /* ═══════════════════ DESIGN SYSTEM ═══════════════════ */
         :root {
-            --bg-main: #0a0a0a;
-            --bg-secondary: #141415;
-            --bg-card: #1c1c1e;
-            --bg-input: #252529;
-            --text-primary: #ffffff;
-            --text-secondary: #8e8e93;
-            --text-sub: #b0b0b5; 
-            --accent-green: #32d74b;
-            --accent-green-glow: rgba(50, 215, 75, 0.4);
-            --accent-red: #ff453a;
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --glass-border-light: rgba(255, 255, 255, 0.05);
+            --void: #03040a;
+            --deep: #080c18;
+            --surface: #0d1220;
+            --card: #111827;
+            --card-raised: #141e2e;
+            --input-bg: #0a1120;
+
+            --cyan: #00e5ff;
+            --cyan-dim: rgba(0, 229, 255, 0.15);
+            --cyan-glow: rgba(0, 229, 255, 0.35);
+            --cyan-border: rgba(0, 229, 255, 0.25);
+
+            --gold: #ffd166;
+            --gold-dim: rgba(255, 209, 102, 0.12);
+            --gold-glow: rgba(255, 209, 102, 0.4);
+
+            --neon-green: #39ff14;
+            --neon-green-dim: rgba(57, 255, 20, 0.12);
+            --neon-green-glow: rgba(57, 255, 20, 0.3);
+
+            --plasma: #b84fff;
+            --plasma-dim: rgba(184, 79, 255, 0.12);
+
+            --danger: #ff4757;
+            --danger-dim: rgba(255, 71, 87, 0.15);
+
+            --text-1: #f0f4ff;
+            --text-2: #8899bb;
+            --text-3: #556080;
+
+            --radius-sm: 12px;
+            --radius-md: 18px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
+        *, *::before, *::after {
+            margin: 0; padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', 'Kantumruy Pro', sans-serif;
+            font-family: 'Siemreap', 'Rajdhani', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
-        html, body {
-            background: var(--bg-main);
-            color: var(--text-primary);
+        /* English/Number elements */
+        .logo-top, .logo-sub, .game-title, .pkg-price,
+        .topup-btn, .buy-btn, .coming-badge,
+        .section-label span, .checkout-price {
+            font-family: 'Orbitron', 'Rajdhani', sans-serif;
+        }
+
+        /* Pure latin package names and descriptions */
+        .pkg-desc, .back-btn {
+            font-family: 'Rajdhani', 'Siemreap', sans-serif;
+        }
+
+        /* Khmer text - Siemreap Font */
+        .pkg-subtext, .game-detail-header h2, .game-detail-header p,
+        .box-section h3, .checkout-name, .error-toast, .info-toast,
+        .pkg-badge {
+            font-family: 'Siemreap', sans-serif;
+            line-height: 1.55;
+        }
+
+        html {
+            background: #01020a;
+        }
+
+        body {
+            background: var(--void);
+            color: var(--text-1);
             min-height: 100vh;
             overflow-x: hidden;
             max-width: 500px;
             margin: 0 auto;
             width: 100%;
             position: relative;
-            scroll-behavior: smooth;
+            /* Subtle grid overlay */
+            background-image:
+                linear-gradient(rgba(0, 229, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.025) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
-        /* ═══════════════════ ANIMATIONS (NEW) ═══════════════════ */
-        @keyframes shine {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
+        /* Ambient glow orbs - lightweight, CSS only, no JS */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -120px;
+            left: -80px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 20%;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(184, 79, 255, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-            100% { transform: translateY(0px); }
+        /* ═══════════════════ iOS 26 SPRING ANIMATIONS ═══════════════════ */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(22px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
-        @keyframes popIn {
-            0% { opacity: 0; transform: translateY(40px) scale(0.9); }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes selectedPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0,229,255,0.55), inset 0 0 15px rgba(0,229,255,0.08); }
+            60% { box-shadow: 0 0 0 10px rgba(0,229,255,0), inset 0 0 20px rgba(0,229,255,0.12); }
+            100% { box-shadow: 0 0 0 0 rgba(0,229,255,0), inset 0 0 15px rgba(0,229,255,0.08); }
+        }
+        @keyframes cardEntrance {
+            0%   { opacity: 0; transform: translateY(36px) scale(0.93); }
+            60%  { opacity: 1; transform: translateY(-4px) scale(1.01); }
+            80%  { transform: translateY(2px) scale(0.995); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 15px rgba(50, 215, 75, 0.15); }
-            50% { box-shadow: 0 0 25px rgba(50, 215, 75, 0.4); }
-            100% { box-shadow: 0 0 15px rgba(50, 215, 75, 0.15); }
+        @keyframes neonFlicker {
+            0%, 95%, 100% { opacity: 1; }
+            96% { opacity: 0.7; }
+            97% { opacity: 1; }
+            98% { opacity: 0.85; }
         }
-
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes badgePop {
+            0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+            70%  { transform: scale(1.15) rotate(2deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         /* ═══════════════════ HEADER ═══════════════════ */
@@ -76,102 +157,205 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px 18px;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border-light);
+            padding: 14px 20px;
+            background: rgba(3, 4, 10, 0.88);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.12);
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 1px 30px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0,229,255,0.2);
+            animation: fadeIn 0.6s ease both;
         }
 
         .logo {
-            font-size: 1.3rem;
-            font-weight: 900;
-            letter-spacing: 1px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 0;
         }
-        .logo .store-name {
-            color: #ffffff;
+
+        .logo-top {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 5px;
+            color: var(--text-1);
+            text-transform: uppercase;
+            line-height: 1;
         }
-        .logo .game-topup {
-            background: linear-gradient(135deg, var(--accent-green), #ffffff, var(--accent-green));
-            background-size: 200% auto;
+
+        .logo-top span {
+            background: linear-gradient(90deg, var(--cyan), #66ffff, var(--cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 0.85em;
-            animation: shine 4s linear infinite; /* Added Shine Animation */
+        }
+
+        .logo-sub {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 6px;
+            color: var(--text-3);
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* Scanline effect on header */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            animation: neonFlicker 4s ease-in-out infinite;
         }
 
         /* ═══════════════════ CONTAINER ═══════════════════ */
         .container {
-            padding: 15px;
-            padding-bottom: 100px; 
+            padding: 18px 16px;
+            padding-bottom: 110px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* ═══════════════════ HOME VIEW ═══════════════════ */
+        /* ═══════════════════ SECTION LABEL ═══════════════════ */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            margin-top: 4px;
+            animation: fadeSlideUp 0.6s 0.2s ease both;
+        }
+        .section-label::before {
+            content: '';
+            display: block;
+            width: 3px;
+            height: 18px;
+            background: linear-gradient(180deg, var(--cyan), var(--plasma));
+            border-radius: 2px;
+            box-shadow: 0 0 8px var(--cyan-glow);
+        }
+        .section-label span {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--text-3);
+            text-transform: uppercase;
+        }
+
+        /* ═══════════════════ GAME GRID ═══════════════════ */
         .game-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
+            gap: 12px;
         }
 
-        /* Smooth Card Animations */
         .game-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-            border: 1px solid rgba(50, 215, 75, 0.3);
-            border-radius: 20px;
-            padding: 12px;
+            background: linear-gradient(145deg, var(--card-raised), var(--card));
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 12px 12px 12px;
             text-align: center;
             display: flex;
             flex-direction: column;
+            align-items: stretch;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards; /* Pop-in Animation */
+            position: relative;
+            overflow: visible;
+            transition: transform 0.42s cubic-bezier(0.34, 1.48, 0.64, 1),
+                        box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        border-color 0.3s ease;
         }
-        
-        /* Staggered Delay for Cards */
-        .game-card:nth-child(1) { animation-delay: 0.1s; }
-        .game-card:nth-child(2) { animation-delay: 0.2s; }
-        .game-card:nth-child(3) { animation-delay: 0.3s; }
-        .game-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .game-card:nth-child(1) { animation: cardEntrance 0.5s 0.1s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+        .game-card:nth-child(2) { animation: cardEntrance 0.5s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+        .game-card:nth-child(3) { animation: cardEntrance 0.5s 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+        .game-card:nth-child(4) { animation: cardEntrance 0.5s 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+        /* Card inner shimmer - disabled for performance */
+        .game-card::before { display: none; }
+
+        /* Top accent line */
+        .game-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 20%; right: 20%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .game-card:hover::after { opacity: 1; }
 
         .game-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(50, 215, 75, 0.2);
-            border-color: var(--accent-green);
+            transform: translateY(-6px) scale(1.01);
+            border-color: var(--cyan-border);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 0 22px var(--cyan-dim);
         }
-        .game-card:active { 
-            transform: scale(0.92); 
+
+        .game-card:active {
+            transform: scale(0.94) translateY(2px);
+            transition: transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Coming soon card */
+        .game-card.soon {
+            border-color: rgba(255,255,255,0.05);
+            opacity: 0.6;
+        }
+        .game-card.soon:hover {
+            transform: translateY(-3px);
+            border-color: rgba(184, 79, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 15px var(--plasma-dim);
         }
 
         .game-icon-box {
             width: 100%;
-            aspect-ratio: 1/1;
-            border-radius: 16px; 
-            margin-bottom: 12px;
-            overflow: hidden; 
+            aspect-ratio: 1 / 1;
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+            overflow: hidden;
+            position: relative;
+            background: var(--surface);
+            flex-shrink: 0;
         }
-        .game-icon-box img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            animation: float 4s ease-in-out infinite; /* Floating Animation */
+        .game-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.45s cubic-bezier(0.34, 1.48, 0.64, 1);
         }
+        .game-card:hover .game-icon-box img { transform: scale(1.05); }
 
-        /* Staggered float to make them look organic */
-        .game-card:nth-child(even) .game-icon-box img { animation-delay: -2s; }
+        .game-icon-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 30%;
+            background: linear-gradient(transparent, rgba(3,4,10,0.45));
+            pointer-events: none;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+        }
 
         .game-title {
-            font-size: 0.75rem; 
-            font-weight: 800;
-            margin-bottom: 10px;
-            white-space: nowrap; 
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis; 
+            text-overflow: ellipsis;
+            color: var(--text-2);
+            text-transform: uppercase;
+            width: 100%;
+            text-align: center;
         }
 
         .topup-btn {
@@ -179,220 +363,490 @@
             padding: 10px 0;
             border: none;
             border-radius: 10px;
-            background: var(--accent-green);
+            background: linear-gradient(135deg, var(--cyan) 0%, #0099ff 100%);
             color: #000;
-            font-weight: 900;
-            font-size: 0.85rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.62rem;
+            letter-spacing: 1.5px;
             margin-top: auto;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.25);
+            flex-shrink: 0;
         }
-        .game-card:hover .topup-btn {
-            box-shadow: 0 0 15px rgba(50, 215, 75, 0.5);
+
+        .topup-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.4s ease;
+        }
+        .game-card:hover .topup-btn::before { left: 100%; }
+        .soon .topup-btn {
+            background: linear-gradient(135deg, #2a2a40, #1a1a30);
+            color: var(--text-3);
+            box-shadow: none;
+        }
+
+        .coming-badge {
+            position: absolute;
+            top: -10px;
+            right: -8px;
+            background: linear-gradient(135deg, #b84fff, #7b2fff);
+            color: white;
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 4px 14px rgba(184,79,255,0.5), 0 0 0 2px rgba(184,79,255,0.2);
+            z-index: 10;
+            animation: badgePop 0.5s 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            white-space: nowrap;
         }
 
         /* ═══════════════════ TOPUP VIEW ═══════════════════ */
         .view-section {
-            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         .back-btn {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            border: 1px solid var(--glass-border);
-            padding: 8px 16px;
-            border-radius: 20px;
-            margin-bottom: 15px;
-            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-2);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 8px 18px 8px 14px;
+            border-radius: 30px;
+            margin-bottom: 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            gap: 8px;
+            transition: transform 0.35s cubic-bezier(0.34, 1.48, 0.64, 1),
+                        background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
         }
-        .back-btn:hover { background: rgba(255, 255, 255, 0.1); transform: translateX(-5px); }
-        .back-btn:active { transform: scale(0.95) translateX(-5px); }
+        .back-btn:hover {
+            background: rgba(0,229,255,0.07);
+            border-color: var(--cyan-border);
+            color: var(--cyan);
+            transform: translateX(-4px);
+        }
+        .back-btn:active {
+            transform: scale(0.93) translateX(-2px);
+            transition: transform 0.1s ease;
+        }
+        .back-btn svg { width: 14px; height: 14px; fill: currentColor; transition: transform 0.2s; }
+        .back-btn:hover svg { transform: translateX(-2px); }
 
+        /* Game Detail Header */
         .game-detail-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: var(--bg-card);
-            padding: 15px;
-            border-radius: 20px;
-            border: 1px solid var(--glass-border-light);
-            margin-bottom: 15px;
-            transition: transform 0.3s ease;
+            gap: 16px;
+            background: linear-gradient(135deg, var(--card-raised), var(--card));
+            padding: 16px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--cyan-border);
+            margin-bottom: 14px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.4), 0 0 20px var(--cyan-dim);
         }
-        .game-detail-header:hover { transform: scale(1.02); }
-        .game-detail-header img { 
-            width: 60px; height: 60px; border-radius: 14px; object-fit: cover;
-            animation: float 3s ease-in-out infinite; 
+        .game-detail-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
         }
-        .game-detail-header h2 { font-size: 1rem; color: var(--accent-green); margin-bottom: 4px; }
-        .game-detail-header p { font-size: 0.7rem; color: var(--text-secondary); line-height: 1.4; }
+        .game-detail-header img {
+            width: 62px; height: 62px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            border: 1px solid var(--cyan-border);
+            box-shadow: 0 0 15px var(--cyan-dim);
+            flex-shrink: 0;
+        }
+        .game-detail-header h2 {
+            font-family: 'Siemreap', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            color: var(--cyan);
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px var(--cyan-glow);
+        }
+        .game-detail-header p {
+            font-family: 'Siemreap', sans-serif;
+            font-size: 0.78rem;
+            color: var(--text-3);
+            line-height: 1.6;
+        }
 
+        /* Box Section */
         .box-section {
-            background: var(--bg-card);
+            background: linear-gradient(145deg, var(--card-raised), var(--card));
             padding: 18px 15px;
-            border-radius: 20px;
-            border: 1px solid var(--glass-border-light);
-            margin-bottom: 15px;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .box-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 30%; right: 30%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
         }
         .box-section h3 {
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-            color: #fff;
+            font-family: 'Siemreap', sans-serif;
+            font-size: 0.88rem;
             font-weight: 700;
+            letter-spacing: 0.3px;
+            margin-bottom: 14px;
+            color: var(--text-2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .box-section h3::before {
+            content: '';
+            display: inline-block;
+            width: 6px; height: 6px;
+            background: var(--cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--cyan-glow);
+            flex-shrink: 0;
         }
 
+        /* Input Group */
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
         .input-group input {
             width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            background: var(--bg-input);
-            border: 1px solid transparent;
-            color: white;
-            font-size: 0.9rem;
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            background: var(--input-bg);
+            border: 1px solid rgba(0,229,255,0.1);
+            color: var(--text-1);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
             text-align: center;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s ease;
+            outline: none;
         }
-        .input-group input:focus { 
-            outline: none; 
-            border-color: var(--accent-green); 
-            background: #1a1a1c; 
-            box-shadow: 0 0 15px rgba(50, 215, 75, 0.2); 
-            transform: translateY(-2px);
+        .input-group input::placeholder { color: var(--text-3); font-weight: 500; }
+        .input-group input:focus {
+            border-color: var(--cyan);
+            background: rgba(0, 229, 255, 0.04);
+            box-shadow: 0 0 0 3px rgba(0,229,255,0.1), 0 0 20px rgba(0,229,255,0.08);
         }
 
+        /* Package Grid */
         .package-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 9px;
         }
 
-        /* Smooth Package Card */
+        /* Package Card */
         .package-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
-            border: 1px solid var(--glass-border-light);
-            border-radius: 16px;
-            padding: 12px 10px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius-md);
+            padding: 10px 8px;
             display: flex;
             align-items: center;
             position: relative;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.38s cubic-bezier(0.34, 1.48, 0.64, 1),
+                        box-shadow 0.3s ease,
+                        border-color 0.3s ease,
+                        background 0.3s ease;
             overflow: hidden;
-            min-height: 80px;
-            animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+            min-height: 72px;
         }
-        .package-card:hover { background: rgba(255, 255, 255, 0.08); transform: translateY(-3px); }
-        .package-card:active { transform: scale(0.95); }
-        
+
+        .package-card:hover {
+            transform: translateY(-3px) scale(1.025);
+            border-color: rgba(0,229,255,0.2);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 12px var(--cyan-dim);
+        }
+
+        .package-card:active {
+            transform: scale(0.93) translateY(1px);
+            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Selected State — The Showstopper */
         .package-card.selected {
-            border-color: var(--accent-green);
-            background: rgba(50, 215, 75, 0.15);
-            transform: translateY(-4px) scale(1.02);
-            animation: pulseGlow 2s infinite; /* Pulsing Animation for selected */
+            background: linear-gradient(145deg, rgba(0,229,255,0.12), rgba(0,229,255,0.05));
+            border-color: var(--cyan);
+            box-shadow:
+                0 0 0 1px var(--cyan),
+                0 0 20px rgba(0,229,255,0.2),
+                0 0 50px rgba(0,229,255,0.08),
+                inset 0 0 20px rgba(0,229,255,0.06);
+            animation: selectedPulse 1.5s ease-out;
+            transform: translateY(-2px);
+        }
+        .package-card.selected::before { opacity: 1; }
+        .package-card.selected .pkg-price { color: #fff; text-shadow: 0 0 12px var(--cyan-glow); }
+
+        /* Selected checkmark */
+        .package-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 5px; right: 7px;
+            width: 16px; height: 16px;
+            background: var(--cyan);
+            color: #000;
+            border-radius: 50%;
+            font-size: 0.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 16px;
+            text-align: center;
+            box-shadow: 0 0 8px var(--cyan-glow);
+            animation: scaleIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
 
         .pkg-img {
-            width: 40px;
-            height: 40px;
+            width: 34px; height: 34px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.05);
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 10px;
+            margin-right: 8px;
             overflow: hidden;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
         }
-        .package-card:hover .pkg-img { transform: scale(1.1) rotate(5deg); }
-        .package-card.selected .pkg-img { transform: scale(1.15) rotate(10deg); }
-        
-        .pkg-img img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
+        .package-card.selected .pkg-img {
+            transform: scale(1.12);
+            border-color: var(--cyan-border);
+            box-shadow: 0 0 10px var(--cyan-dim);
+        }
+        .pkg-img img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
 
-        .pkg-info { display: flex; flex-direction: column; align-items: flex-end; text-align: right; width: 100%; overflow: hidden; }
-        .pkg-subtext { font-size: 0.6rem; color: var(--text-sub); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-        .pkg-price { font-size: 1rem; font-weight: 800; color: var(--accent-green); margin-bottom: 2px; transition: color 0.3s; }
-        .package-card.selected .pkg-price { text-shadow: 0 0 10px rgba(50, 215, 75, 0.5); }
-        .pkg-desc { font-size: 0.65rem; color: var(--text-secondary); font-weight: 600; }
-        .pkg-badge { position: absolute; top: 4px; right: 8px; font-size: 0.55rem; color: var(--accent-red); font-style: italic; font-weight: 800; animation: float 2s infinite alternate; }
+        .pkg-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+            width: 100%;
+            overflow: hidden;
+            gap: 1px;
+        }
 
-        /* ═══════════════════ STICKY BOTTOM BAR ═══════════════════ */
+        .pkg-subtext {
+            font-size: 0.6rem;
+            color: var(--text-3);
+            margin-bottom: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            font-weight: 600;
+            font-family: 'Siemreap', sans-serif;
+            line-height: 1.4;
+        }
+
+        .pkg-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 2px;
+            letter-spacing: 0px;
+            transition: color 0.2s, text-shadow 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 100%;
+        }
+
+        .pkg-desc {
+            font-size: 0.65rem;
+            color: var(--text-3);
+            font-weight: 600;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 0.2px;
+        }
+
+        .pkg-badge {
+            display: inline-block;
+            font-size: 0.52rem;
+            background: linear-gradient(135deg, var(--gold), #ff9a00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-style: normal;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.5px;
+            filter: drop-shadow(0 0 4px var(--gold-glow));
+            margin-bottom: 2px;
+            width: 100%;
+            text-align: right;
+        }
+
+        /* ═══════════════════ CHECKOUT BAR ═══════════════════ */
         .checkout-bar {
             position: fixed;
-            bottom: -100px;
+            bottom: -120px;
             left: 50%;
             transform: translateX(-50%);
-            width: 100%;
-            max-width: 500px;
-            background: rgba(20, 20, 21, 0.95);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-top: 1px solid var(--accent-green);
-            padding: 15px 20px;
+            width: calc(100% - 24px);
+            max-width: 476px;
+            background: rgba(8, 12, 24, 0.92);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid var(--cyan-border);
+            padding: 14px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            border-radius: 25px 25px 0 0;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 -5px 30px rgba(50, 215, 75, 0.2);
+            border-radius: var(--radius-xl);
+            transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow:
+                0 -4px 40px rgba(0, 229, 255, 0.12),
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                inset 0 1px 0 rgba(0,229,255,0.15);
+            margin-bottom: 8px;
         }
+
         .checkout-bar.show { bottom: 0; }
 
-        .checkout-details { display: flex; flex-direction: column; }
-        .checkout-name { color: #fff; font-size: 0.8rem; font-weight: 600; }
-        .checkout-price { 
-            color: var(--accent-green); font-size: 1.3rem; font-weight: 900; letter-spacing: 0.5px;
-            transition: transform 0.3s ease;
+        .checkout-bar::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 20%; right: 20%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
         }
-        .checkout-bar.pop .checkout-price { transform: scale(1.1); }
+
+        .checkout-details { display: flex; flex-direction: column; gap: 2px; }
+
+        .checkout-name {
+            color: var(--text-2);
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'Siemreap', sans-serif;
+            letter-spacing: 0.2px;
+        }
+
+        .checkout-price {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cyan);
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 20px var(--cyan-glow);
+            white-space: nowrap;
+        }
 
         .buy-btn {
-            background: var(--accent-green);
+            background: linear-gradient(135deg, var(--cyan) 0%, #0077ee 100%);
             color: #000;
             border: none;
-            padding: 12px 35px;
-            border-radius: 14px;
-            font-weight: 900;
-            font-size: 0.95rem;
+            padding: 13px 30px;
+            border-radius: var(--radius-md);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.72rem;
+            letter-spacing: 2px;
             cursor: pointer;
             text-transform: uppercase;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,229,255,0.35);
         }
-        .buy-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(50, 215, 75, 0.4); }
-        .buy-btn:active { transform: scale(0.9); }
+        .buy-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -60%;
+            width: 60%; height: 200%;
+            background: rgba(255,255,255,0.25);
+            transform: skewX(-20deg);
+            transition: left 0.4s ease;
+        }
+        .buy-btn:hover::before { left: 120%; }
+        .buy-btn:active {
+            transform: scale(0.91) translateY(1px);
+            transition: transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
 
-        /* ═══════════════════ TOAST ERROR & INFO ═══════════════════ */
+        /* ═══════════════════ TOASTS ═══════════════════ */
         .error-toast, .info-toast {
             position: fixed;
             top: -100px;
             left: 50%;
             transform: translateX(-50%);
             color: white;
-            padding: 12px 24px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
+            padding: 11px 22px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            font-family: 'Siemreap', sans-serif;
+            letter-spacing: 0.2px;
             z-index: 10001;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             white-space: nowrap;
+            backdrop-filter: blur(20px);
+        }
+        .error-toast {
+            background: rgba(255, 71, 87, 0.92);
+            border: 1px solid rgba(255,71,87,0.5);
+            box-shadow: 0 8px 30px rgba(255, 71, 87, 0.4), 0 0 1px rgba(255,71,87,0.8);
+        }
+        .info-toast {
+            background: rgba(0, 229, 255, 0.92);
+            border: 1px solid rgba(0,229,255,0.5);
+            color: #000;
+            font-weight: 800;
+            box-shadow: 0 8px 30px rgba(0, 229, 255, 0.4);
+        }
+        .error-toast.show, .info-toast.show { top: 58px; }
+
+        /* ═══════════════════ PERFORMANCE ═══════════════════ */
+        .package-card, .game-card {
+            will-change: transform;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+        .checkout-bar {
+            will-change: bottom;
+            -webkit-transform: translateX(-50%) translateZ(0);
         }
 
-        .error-toast { background: rgba(255, 69, 58, 0.95); box-shadow: 0 10px 30px rgba(255, 69, 58, 0.3); }
-        .info-toast { background: rgba(50, 215, 75, 0.95); color: black; box-shadow: 0 10px 30px rgba(50, 215, 75, 0.3); }
-
-        .error-toast.show, .info-toast.show { top: 50px; }
+        /* ═══════════════════ SCROLLBAR ═══════════════════ */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--cyan), var(--plasma));
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
@@ -404,44 +858,48 @@
 
     <header>
         <div class="logo">
-            <span class="store-name">YUPAI STORE</span> 
-            <span class="game-topup">GAME TOPUP</span>
+            <div class="logo-top">YUPAI <span>STORE</span></div>
+            <div class="logo-sub">Game Top-Up Platform</div>
         </div>
     </header>
 
     <div class="container">
 
         <div id="homeView" class="view-section">
+            <div class="section-label"><span>Select Game</span></div>
             <div class="game-grid">
                 <div class="game-card" onclick="openTopup('MLBB')">
                     <div class="game-icon-box"><img src="MLBB.png" alt="MLBB"></div>
-                    <div class="game-title">MOBILE LEGENDS</div>
-                    <button class="topup-btn">TOPUP</button>
+                    <div class="game-title">Mobile Legends</div>
+                    <button class="topup-btn">TOP UP</button>
                 </div>
-                
+
                 <div class="game-card" onclick="openTopup('FF')">
                     <div class="game-icon-box"><img src="FF.png" alt="FF"></div>
-                    <div class="game-title">FREE FIRE</div>
-                    <button class="topup-btn">TOPUP</button>
+                    <div class="game-title">Free Fire</div>
+                    <button class="topup-btn">TOP UP</button>
                 </div>
-                
-                <div class="game-card" onclick="showInfo('cooming soon មកដល់ឆាប់ៗ')">
+
+                <div class="game-card soon" onclick="showInfo('cooming soon មកដល់ឆាប់ៗ')">
+                    <span class="coming-badge">Soon</span>
                     <div class="game-icon-box"><img src="HOK.png" alt="HOK"></div>
-                    <div class="game-title">HONOR OF KINGS</div>
-                    <button class="topup-btn">TOPUP</button>
+                    <div class="game-title">Honor of Kings</div>
+                    <button class="topup-btn">COMING SOON</button>
                 </div>
-                
-                <div class="game-card" onclick="showInfo('cooming soon មកដល់ឆាប់ៗ')">
+
+                <div class="game-card soon" onclick="showInfo('cooming soon មកដល់ឆាប់ៗ')">
+                    <span class="coming-badge">Soon</span>
                     <div class="game-icon-box"><img src="MCGG.png" alt="MCGG"></div>
-                    <div class="game-title">MAGIC CHESS: GO GO</div>
-                    <button class="topup-btn">TOPUP</button>
+                    <div class="game-title">Magic Chess: Go Go</div>
+                    <button class="topup-btn">COMING SOON</button>
                 </div>
             </div>
         </div>
 
         <div id="topupView" class="view-section" style="display: none;">
             <button class="back-btn" onclick="goHome()">
-                <span>⬅</span> ត្រឡប់ក្រោយ
+                <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                ត្រឡប់ក្រោយ
             </button>
 
             <div class="game-detail-header" id="gameDetailHeader"></div>
@@ -462,9 +920,9 @@
     <div class="checkout-bar" id="checkoutBar">
         <div class="checkout-details">
             <span class="checkout-name" id="selectedName">បានជ្រើសរើស: 0 កញ្ចប់</span>
-            <span class="checkout-price" id="selectedPrice">0.00$</span>
+            <span class="checkout-price" id="selectedPrice">$0.00</span>
         </div>
-        <button class="buy-btn" onclick="processCheckout()">Buy</button>
+        <button class="buy-btn" onclick="processCheckout()">Buy Now</button>
     </div>
 
     <script>
@@ -472,13 +930,13 @@
         const homeView = document.getElementById('homeView');
         const topupView = document.getElementById('topupView');
         const checkoutBar = document.getElementById('checkoutBar');
-        
+
         const selectedNameText = document.getElementById('selectedName');
         const selectedPriceText = document.getElementById('selectedPrice');
         const gameDetailHeader = document.getElementById('gameDetailHeader');
         const inputContainer = document.getElementById('inputContainer');
         const packageContainer = document.getElementById('packageContainer');
-        
+
         let selectedPackages = [];
         let currentGame = '';
 
@@ -547,7 +1005,7 @@
         ];
 
         function playCustomSound() {
-            clickSound.currentTime = 0; 
+            clickSound.currentTime = 0;
             clickSound.play().catch(e => console.log("Audio Error:", e));
         }
 
@@ -558,7 +1016,7 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
-        
+
         function showInfo(msg) {
             playCustomSound();
             const toast = document.getElementById('infoToast');
@@ -570,7 +1028,7 @@
         function openTopup(game) {
             playCustomSound();
             currentGame = game;
-            
+
             selectedPackages = [];
             packageContainer.innerHTML = '';
             inputContainer.innerHTML = '';
@@ -585,11 +1043,11 @@
                     </div>
                 `;
                 inputContainer.innerHTML = `
-                    <input type="text" id="userIdInput" placeholder="User ID">
-                    <input type="text" id="serverIdInput" placeholder="Server ID">
+                    <input type="number" id="userIdInput" placeholder="User ID">
+                    <input type="number" id="serverIdInput" placeholder="Server ID">
                 `;
                 renderPackages(mlbbPackages);
-            } 
+            }
             else if (game === 'FF') {
                 gameDetailHeader.innerHTML = `
                     <img src="FF.png" alt="FF">
@@ -599,7 +1057,7 @@
                     </div>
                 `;
                 inputContainer.innerHTML = `
-                    <input type="text" id="userIdInput" placeholder="User ID">
+                    <input type="number" id="userIdInput" placeholder="User ID">
                 `;
                 renderPackages(ffPackages);
             }
@@ -610,15 +1068,12 @@
         }
 
         function renderPackages(packages) {
-            packages.forEach((pkg, index) => {
+            packages.forEach(pkg => {
                 let badgeHtml = pkg.badge ? `<div class="pkg-badge">${pkg.badge}</div>` : '';
                 let subtextHtml = pkg.subtext ? `<div class="pkg-subtext">${pkg.subtext}</div>` : '';
-                
-                // Add staggered animation delay to package cards
-                let delay = index * 0.05;
-                
+
                 let cardHtml = `
-                    <div class="package-card" style="animation-delay: ${delay}s" onclick="selectPackage(this, '${pkg.name}', '${pkg.price}')">
+                    <div class="package-card" onclick="selectPackage(this, '${pkg.name}', '${pkg.price}')">
                         <div class="pkg-img"><img src="${pkg.img}"></div>
                         <div class="pkg-info">
                             ${badgeHtml}
@@ -659,15 +1114,9 @@
             if (selectedPackages.length > 0) {
                 let total = 0;
                 selectedPackages.forEach(p => total += p.price);
-                
+
                 selectedNameText.textContent = `បានជ្រើសរើស: ${selectedPackages.length} កញ្ចប់`;
                 selectedPriceText.textContent = `$${total.toFixed(2)}`;
-                
-                // Add pop effect to price
-                checkoutBar.classList.remove('pop');
-                void checkoutBar.offsetWidth; // trigger reflow
-                checkoutBar.classList.add('pop');
-                
                 checkoutBar.classList.add('show');
             } else {
                 checkoutBar.classList.remove('show');
@@ -676,11 +1125,11 @@
 
         function processCheckout() {
             playCustomSound();
-            
+
             const userId = document.getElementById('userIdInput') ? document.getElementById('userIdInput').value.trim() : '';
             const serverIdInput = document.getElementById('serverIdInput');
             const serverId = serverIdInput ? serverIdInput.value.trim() : '';
-            
+
             if (!userId) {
                 showError("សូមបញ្ចូល User ID ជាមុនសិន!");
                 return;
@@ -696,7 +1145,7 @@
 
             let total = 0;
             let packageListText = '';
-            
+
             selectedPackages.forEach(p => {
                 packageListText += `${p.name}  ${p.priceStr}\n`;
                 total += p.price;
