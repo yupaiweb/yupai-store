@@ -1,1203 +1,787 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YUPAI STORE GAME TOPUP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Siemreap&family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-
-    <style>
-        /* ═══════════════════ DESIGN SYSTEM ═══════════════════ */
-        :root {
-            --void: #03040a;
-            --deep: #080c18;
-            --surface: #0d1220;
-            --card: #111827;
-            --card-raised: #141e2e;
-            --input-bg: #0a1120;
-
-            --cyan: #00e5ff;
-            --cyan-dim: rgba(0, 229, 255, 0.15);
-            --cyan-glow: rgba(0, 229, 255, 0.35);
-            --cyan-border: rgba(0, 229, 255, 0.25);
-
-            --gold: #ffd166;
-            --gold-dim: rgba(255, 209, 102, 0.12);
-            --gold-glow: rgba(255, 209, 102, 0.4);
-
-            --neon-green: #39ff14;
-            --neon-green-dim: rgba(57, 255, 20, 0.12);
-            --neon-green-glow: rgba(57, 255, 20, 0.3);
-
-            --plasma: #b84fff;
-            --plasma-dim: rgba(184, 79, 255, 0.12);
-
-            --danger: #ff4757;
-            --danger-dim: rgba(255, 71, 87, 0.15);
-
-            --text-1: #f0f4ff;
-            --text-2: #8899bb;
-            --text-3: #556080;
-
-            --radius-sm: 12px;
-            --radius-md: 18px;
-            --radius-lg: 24px;
-            --radius-xl: 32px;
-        }
-
-        *, *::before, *::after {
-            margin: 0; padding: 0;
-            box-sizing: border-box;
-            font-family: 'Siemreap', 'Rajdhani', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* English/Number elements */
-        .logo-top, .logo-sub, .game-title, .pkg-price,
-        .topup-btn, .buy-btn, .coming-badge,
-        .section-label span, .checkout-price {
-            font-family: 'Orbitron', 'Rajdhani', sans-serif;
-        }
-
-        /* Pure latin package names and descriptions */
-        .pkg-desc, .back-btn {
-            font-family: 'Rajdhani', 'Siemreap', sans-serif;
-        }
-
-        /* Khmer text - Siemreap Font */
-        .pkg-subtext, .game-detail-header h2, .game-detail-header p,
-        .box-section h3, .checkout-name, .error-toast, .info-toast,
-        .pkg-badge {
-            font-family: 'Siemreap', sans-serif;
-            line-height: 1.55;
-        }
-
-        html {
-            background: #01020a;
-            overflow-x: hidden;
-            scrollbar-width: none;
-        }
-        html::-webkit-scrollbar { display: none; }
-
-        body {
-            background: var(--void);
-            color: var(--text-1);
-            min-height: 100vh;
-            overflow-x: hidden;
-            max-width: 500px;
-            margin: 0 auto;
-            width: 100%;
-            position: relative;
-            scrollbar-width: none;
-            background-image:
-                linear-gradient(rgba(0, 229, 255, 0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 229, 255, 0.025) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-        body::-webkit-scrollbar { display: none; }
-
-        /* Ambient glow orbs - lightweight, CSS only, no JS */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -120px;
-            left: -80px;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(0, 229, 255, 0.06) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: 20%;
-            right: -100px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(184, 79, 255, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ═══════════════════ iOS 26 SPRING ANIMATIONS ═══════════════════ */
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(22px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.7); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes selectedPulse {
-            0% { box-shadow: 0 0 0 0 rgba(0,229,255,0.55), inset 0 0 15px rgba(0,229,255,0.08); }
-            60% { box-shadow: 0 0 0 10px rgba(0,229,255,0), inset 0 0 20px rgba(0,229,255,0.12); }
-            100% { box-shadow: 0 0 0 0 rgba(0,229,255,0), inset 0 0 15px rgba(0,229,255,0.08); }
-        }
-        @keyframes cardEntrance {
-            0%   { opacity: 0; transform: translateY(36px) scale(0.93); }
-            60%  { opacity: 1; transform: translateY(-4px) scale(1.01); }
-            80%  { transform: translateY(2px) scale(0.995); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes neonFlicker {
-            0%, 95%, 100% { opacity: 1; }
-            96% { opacity: 0.7; }
-            97% { opacity: 1; }
-            98% { opacity: 0.85; }
-        }
-        @keyframes badgePop {
-            0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
-            70%  { transform: scale(1.15) rotate(2deg); opacity: 1; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        /* ═══════════════════ HEADER ═══════════════════ */
-        header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 14px 20px;
-            background: rgba(3, 4, 10, 0.88);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border-bottom: 1px solid rgba(0, 229, 255, 0.12);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 30px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0,229,255,0.2);
-            animation: fadeIn 0.6s ease both;
-        }
-
-        .logo {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
-        }
-
-        .logo-top {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 900;
-            letter-spacing: 5px;
-            color: var(--text-1);
-            text-transform: uppercase;
-            line-height: 1;
-        }
-
-        .logo-top span {
-            background: linear-gradient(90deg, var(--cyan), #66ffff, var(--cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-sub {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.6rem;
-            font-weight: 600;
-            letter-spacing: 6px;
-            color: var(--text-3);
-            text-transform: uppercase;
-            margin-top: 2px;
-        }
-
-        /* Scanline effect on header */
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-            animation: neonFlicker 4s ease-in-out infinite;
-        }
-
-        /* ═══════════════════ CONTAINER ═══════════════════ */
-        .container {
-            padding: 18px 16px;
-            padding-bottom: 110px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ═══════════════════ SECTION LABEL ═══════════════════ */
-        .section-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-            margin-top: 4px;
-            animation: fadeSlideUp 0.6s 0.2s ease both;
-        }
-        .section-label::before {
-            content: '';
-            display: block;
-            width: 3px;
-            height: 18px;
-            background: linear-gradient(180deg, var(--cyan), var(--plasma));
-            border-radius: 2px;
-            box-shadow: 0 0 8px var(--cyan-glow);
-        }
-        .section-label span {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.6rem;
-            font-weight: 700;
-            letter-spacing: 4px;
-            color: var(--text-3);
-            text-transform: uppercase;
-        }
-
-        /* ═══════════════════ GAME GRID ═══════════════════ */
-        .game-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-auto-rows: auto;
-            gap: 12px;
-            padding-top: 4px;
-        }
-
-        .game-card {
-            background: linear-gradient(145deg, var(--card-raised), var(--card));
-            border: 1px solid rgba(0, 229, 255, 0.1);
-            border-radius: var(--radius-lg);
-            padding: 12px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.42s cubic-bezier(0.34, 1.48, 0.64, 1),
-                        box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                        border-color 0.3s ease;
-        }
-
-        /* Force ALL image boxes same size using vw */
-        .game-icon-box {
-            width: 100%;
-            /* (100vw - container padding 32px - gap 12px) / 2 cols - card padding 24px */
-            height: calc((min(100vw, 500px) - 44px) / 2 - 24px);
-            border-radius: var(--radius-md);
-            margin-bottom: 10px;
-            overflow: hidden;
-            position: relative;
-            background: var(--surface);
-            flex-shrink: 0;
-        }
-
-        .game-card:nth-child(1) { animation: cardEntrance 0.5s 0.1s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-        .game-card:nth-child(2) { animation: cardEntrance 0.5s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-        .game-card:nth-child(3) { animation: cardEntrance 0.5s 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-        .game-card:nth-child(4) { animation: cardEntrance 0.5s 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-
-        /* Card inner shimmer - disabled for performance */
-        .game-card::before { display: none; }
-
-        /* Top accent line */
-        .game-card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 20%; right: 20%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .game-card:hover::after { opacity: 1; }
-
-        .game-card:hover {
-            transform: translateY(-6px) scale(1.01);
-            border-color: var(--cyan-border);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 0 22px var(--cyan-dim);
-        }
-
-        .game-card:active {
-            transform: scale(0.94) translateY(2px);
-            transition: transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        /* Coming soon card */
-        .game-card.soon {
-            border-color: rgba(255,255,255,0.05);
-            opacity: 0.6;
-        }
-        .game-card.soon:hover {
-            transform: translateY(-3px);
-            border-color: rgba(184, 79, 255, 0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 15px var(--plasma-dim);
-        }
-
-        .game-icon-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-            transition: transform 0.45s cubic-bezier(0.34, 1.48, 0.64, 1);
-        }
-        .game-card:hover .game-icon-box img { transform: scale(1.05); }
-
-        .game-icon-box::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 30%;
-            background: linear-gradient(transparent, rgba(3,4,10,0.45));
-            pointer-events: none;
-            border-radius: 0 0 var(--radius-md) var(--radius-md);
-        }
-
-        .game-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.58rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: var(--text-2);
-            text-transform: uppercase;
-            width: 100%;
-            text-align: center;
-        }
-
-        .topup-btn {
-            width: 100%;
-            padding: 10px 0;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--cyan) 0%, #0099ff 100%);
-            color: #000;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.62rem;
-            letter-spacing: 1.5px;
-            margin-top: auto;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.25);
-            flex-shrink: 0;
-        }
-
-        .topup-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.4s ease;
-        }
-        .game-card:hover .topup-btn::before { left: 100%; }
-        .soon .topup-btn {
-            background: linear-gradient(135deg, #2a2a40, #1a1a30);
-            color: var(--text-3);
-            box-shadow: none;
-        }
-
-        .coming-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: linear-gradient(135deg, #b84fff, #7b2fff);
-            color: white;
-            font-size: 0.52rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            padding: 4px 9px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            font-family: 'Orbitron', sans-serif;
-            box-shadow: 0 4px 14px rgba(184,79,255,0.5);
-            z-index: 10;
-            animation: badgePop 0.5s 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-            white-space: nowrap;
-        }
-
-        /* ═══════════════════ TOPUP VIEW ═══════════════════ */
-        .view-section {
-            animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        .back-btn {
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text-2);
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 8px 18px 8px 14px;
-            border-radius: 30px;
-            margin-bottom: 16px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: transform 0.35s cubic-bezier(0.34, 1.48, 0.64, 1),
-                        background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-        }
-        .back-btn:hover {
-            background: rgba(0,229,255,0.07);
-            border-color: var(--cyan-border);
-            color: var(--cyan);
-            transform: translateX(-4px);
-        }
-        .back-btn:active {
-            transform: scale(0.93) translateX(-2px);
-            transition: transform 0.1s ease;
-        }
-        .back-btn svg { width: 14px; height: 14px; fill: currentColor; transition: transform 0.2s; }
-        .back-btn:hover svg { transform: translateX(-2px); }
-
-        /* Game Detail Header */
-        .game-detail-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: linear-gradient(135deg, var(--card-raised), var(--card));
-            padding: 16px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--cyan-border);
-            margin-bottom: 14px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.4), 0 0 20px var(--cyan-dim);
-        }
-        .game-detail-header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-        }
-        .game-detail-header img {
-            width: 62px; height: 62px;
-            border-radius: var(--radius-sm);
-            object-fit: cover;
-            border: 1px solid var(--cyan-border);
-            box-shadow: 0 0 15px var(--cyan-dim);
-            flex-shrink: 0;
-        }
-        .game-detail-header h2 {
-            font-family: 'Siemreap', sans-serif;
-            font-size: 0.92rem;
-            font-weight: 700;
-            letter-spacing: 0.2px;
-            color: var(--cyan);
-            margin-bottom: 5px;
-            text-shadow: 0 0 15px var(--cyan-glow);
-        }
-        .game-detail-header p {
-            font-family: 'Siemreap', sans-serif;
-            font-size: 0.78rem;
-            color: var(--text-3);
-            line-height: 1.6;
-        }
-
-        /* Box Section */
-        .box-section {
-            background: linear-gradient(145deg, var(--card-raised), var(--card));
-            padding: 18px 15px;
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 14px;
-            position: relative;
-            overflow: hidden;
-        }
-        .box-section::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 30%; right: 30%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
-        }
-        .box-section h3 {
-            font-family: 'Siemreap', sans-serif;
-            font-size: 0.88rem;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            margin-bottom: 14px;
-            color: var(--text-2);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .box-section h3::before {
-            content: '';
-            display: inline-block;
-            width: 6px; height: 6px;
-            background: var(--cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--cyan-glow);
-            flex-shrink: 0;
-        }
-
-        /* Input Group */
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: var(--radius-sm);
-            background: var(--input-bg);
-            border: 1px solid rgba(0,229,255,0.1);
-            color: var(--text-1);
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-align: center;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-        .input-group input::placeholder { color: var(--text-3); font-weight: 500; }
-        .input-group input:focus {
-            border-color: var(--cyan);
-            background: rgba(0, 229, 255, 0.04);
-            box-shadow: 0 0 0 3px rgba(0,229,255,0.1), 0 0 20px rgba(0,229,255,0.08);
-        }
-
-        /* Package Grid */
-        .package-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 9px;
-        }
-
-        /* Package Card */
-        .package-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: var(--radius-md);
-            padding: 10px 8px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            position: relative;
-            cursor: pointer;
-            width: 100%;
-            min-width: 0;
-            overflow: hidden;
-            box-sizing: border-box;
-            transition: transform 0.38s cubic-bezier(0.34, 1.48, 0.64, 1),
-                        box-shadow 0.3s ease,
-                        border-color 0.3s ease,
-                        background 0.3s ease;
-            min-height: 76px;
-        }
-
-        .package-card:hover {
-            transform: translateY(-3px) scale(1.025);
-            border-color: rgba(0,229,255,0.2);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 12px var(--cyan-dim);
-        }
-
-        .package-card:active {
-            transform: scale(0.93) translateY(1px);
-            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        /* Selected State — The Showstopper */
-        .package-card.selected {
-            background: linear-gradient(145deg, rgba(0,229,255,0.12), rgba(0,229,255,0.05));
-            border-color: var(--cyan);
-            box-shadow:
-                0 0 0 1px var(--cyan),
-                0 0 20px rgba(0,229,255,0.2),
-                0 0 50px rgba(0,229,255,0.08),
-                inset 0 0 20px rgba(0,229,255,0.06);
-            animation: selectedPulse 1.5s ease-out;
-            transform: translateY(-2px);
-        }
-        .package-card.selected::before { opacity: 1; }
-        .package-card.selected .pkg-price { color: #fff; text-shadow: 0 0 12px var(--cyan-glow); }
-
-        /* Selected checkmark */
-        .package-card.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 5px; right: 7px;
-            width: 16px; height: 16px;
-            background: var(--cyan);
-            color: #000;
-            border-radius: 50%;
-            font-size: 0.6rem;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 16px;
-            text-align: center;
-            box-shadow: 0 0 8px var(--cyan-glow);
-            animation: scaleIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-        }
-
-        .pkg-img {
-            width: 36px;
-            height: 36px;
-            min-width: 36px;
-            border-radius: 9px;
-            background: rgba(255,255,255,0.05);
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 8px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-        }
-        .package-card.selected .pkg-img {
-            transform: scale(1.08);
-            border-color: var(--cyan-border);
-            box-shadow: 0 0 10px var(--cyan-dim);
-        }
-        .pkg-img img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            border-radius: 7px;
-        }
-
-        .pkg-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            text-align: right;
-            flex: 1;
-            min-width: 0;
-            max-width: 100%;
-            overflow: hidden;
-            gap: 1px;
-        }
-
-        .pkg-subtext {
-            font-size: 0.58rem;
-            color: var(--text-3);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-            font-weight: 600;
-            font-family: 'Siemreap', sans-serif;
-            line-height: 1.35;
-        }
-
-        .pkg-price {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.88rem;
-            font-weight: 700;
-            color: var(--cyan);
-            letter-spacing: 0px;
-            transition: color 0.2s, text-shadow 0.2s;
-            white-space: nowrap;
-            line-height: 1.2;
-            max-width: 100%;
-        }
-
-        .pkg-desc {
-            font-size: 0.6rem;
-            color: var(--text-3);
-            font-weight: 600;
-            font-family: 'Rajdhani', sans-serif;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-            line-height: 1.3;
-        }
-
-        .pkg-badge {
-            display: inline-block;
-            font-size: 0.5rem;
-            background: linear-gradient(135deg, var(--gold), #ff9a00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            font-family: 'Orbitron', sans-serif;
-            filter: drop-shadow(0 0 4px var(--gold-glow));
-            width: 100%;
-            text-align: right;
-            line-height: 1.4;
-            white-space: nowrap;
-        }
-
-        /* ═══════════════════ CHECKOUT BAR ═══════════════════ */
-        .checkout-bar {
-            position: fixed;
-            bottom: -120px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 24px);
-            max-width: 476px;
-            background: rgba(8, 12, 24, 0.92);
-            backdrop-filter: blur(30px) saturate(200%);
-            -webkit-backdrop-filter: blur(30px) saturate(200%);
-            border: 1px solid var(--cyan-border);
-            padding: 14px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            border-radius: var(--radius-xl);
-            transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow:
-                0 -4px 40px rgba(0, 229, 255, 0.12),
-                0 20px 60px rgba(0, 0, 0, 0.8),
-                inset 0 1px 0 rgba(0,229,255,0.15);
-            margin-bottom: 8px;
-        }
-
-        .checkout-bar.show { bottom: 0; }
-
-        .checkout-bar::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 20%; right: 20%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-        }
-
-        .checkout-details { display: flex; flex-direction: column; gap: 2px; }
-
-        .checkout-name {
-            color: var(--text-2);
-            font-size: 0.8rem;
-            font-weight: 600;
-            font-family: 'Siemreap', sans-serif;
-            letter-spacing: 0.2px;
-        }
-
-        .checkout-price {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--cyan);
-            font-size: 1.25rem;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 20px var(--cyan-glow);
-            white-space: nowrap;
-        }
-
-        .buy-btn {
-            background: linear-gradient(135deg, var(--cyan) 0%, #0077ee 100%);
-            color: #000;
-            border: none;
-            padding: 13px 30px;
-            border-radius: var(--radius-md);
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.72rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,229,255,0.35);
-        }
-        .buy-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -60%;
-            width: 60%; height: 200%;
-            background: rgba(255,255,255,0.25);
-            transform: skewX(-20deg);
-            transition: left 0.4s ease;
-        }
-        .buy-btn:hover::before { left: 120%; }
-        .buy-btn:active {
-            transform: scale(0.91) translateY(1px);
-            transition: transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        /* ═══════════════════ TOASTS ═══════════════════ */
-        .error-toast, .info-toast {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            padding: 11px 22px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.88rem;
-            font-family: 'Siemreap', sans-serif;
-            letter-spacing: 0.2px;
-            z-index: 10001;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            white-space: nowrap;
-            backdrop-filter: blur(20px);
-        }
-        .error-toast {
-            background: rgba(255, 71, 87, 0.92);
-            border: 1px solid rgba(255,71,87,0.5);
-            box-shadow: 0 8px 30px rgba(255, 71, 87, 0.4), 0 0 1px rgba(255,71,87,0.8);
-        }
-        .info-toast {
-            background: rgba(0, 229, 255, 0.92);
-            border: 1px solid rgba(0,229,255,0.5);
-            color: #000;
-            font-weight: 800;
-            box-shadow: 0 8px 30px rgba(0, 229, 255, 0.4);
-        }
-        .error-toast.show, .info-toast.show { top: 58px; }
-
-        /* ═══════════════════ PERFORMANCE ═══════════════════ */
-        .package-card, .game-card {
-            will-change: transform;
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-        }
-        .checkout-bar {
-            will-change: bottom;
-            -webkit-transform: translateX(-50%) translateZ(0);
-        }
-
-        /* ═══════════════════ SCROLLBAR ═══════════════════ */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--cyan), var(--plasma));
-            border-radius: 2px;
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>YUPAI STORE</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════════════════
+   THEME TOKENS — every color derives from these
+══════════════════════════════════════════════════ */
+:root {
+  --ac:#00d4ff; --ac2:#ff2233;
+  --ac-glow:rgba(0,212,255,.32); --ac-dim:rgba(0,212,255,.10); --ac-soft:rgba(0,212,255,.06);
+  --bg:#020810;
+  --bg-mesh:
+    radial-gradient(ellipse 55% 40% at 12% 18%,rgba(0,55,150,.22) 0%,transparent 62%),
+    radial-gradient(ellipse 48% 44% at 88% 82%,rgba(50,0,120,.16) 0%,transparent 62%),
+    linear-gradient(170deg,#020510 0%,#050b1a 50%,#03070f 100%);
+  --grid:rgba(0,212,255,.020);
+  --card-bg:rgba(255,255,255,.046); --card-b:rgba(255,255,255,.09);
+  --card-inner:rgba(0,212,255,.08); --card-shine:rgba(255,255,255,.09);
+  --card-hbg:rgba(0,212,255,.08); --card-hb:rgba(0,212,255,.32); --card-glow:rgba(0,212,255,.18);
+  --btn:linear-gradient(135deg,#007a99,#00d4ff); --btn-c:#001820;
+  --btn-ib:rgba(255,34,51,.30); --btn-ic:#ff2233;
+  --sec-c:#ff2233; --bar:#00d4ff;
+  --tag-bg:linear-gradient(135deg,#5b21b6,#3b0d90); --tag-gl:rgba(91,33,182,.45);
+  --shine:linear-gradient(105deg,#444 0%,#888 13%,#ddd 26%,#fff 34%,#ddd 42%,#888 55%,#ccc 68%,#fff 80%,#555 100%);
+  --lw:#00d4ff; --lg:rgba(0,212,255,.72);
+  --menu-bg:rgba(3,6,18,.97); --menu-b:rgba(0,212,255,.14);
+  --td:rgba(255,255,255,.28); --ts:rgba(255,255,255,.50); --txt:#fff;
+  --pkg-sel-bg:rgba(0,212,255,.15); --pkg-sel-b:#00d4ff;
+  --input-bg:rgba(255,255,255,.06); --input-b:rgba(255,255,255,.10);
+  --chk-bg:rgba(3,6,18,.96); --chk-b:rgba(0,212,255,.25);
+}
+body.th-em {
+  --ac:#00e676; --ac2:#a259ff;
+  --ac-glow:rgba(0,230,118,.32); --ac-dim:rgba(0,230,118,.10); --ac-soft:rgba(0,230,118,.06);
+  --bg:#020e05;
+  --bg-mesh:radial-gradient(ellipse 55% 40% at 12% 18%,rgba(0,110,45,.22) 0%,transparent 62%),radial-gradient(ellipse 48% 44% at 88% 82%,rgba(90,0,150,.15) 0%,transparent 62%),linear-gradient(170deg,#020a04 0%,#041408 50%,#030905 100%);
+  --grid:rgba(0,200,80,.020);
+  --card-bg:rgba(0,40,16,.55); --card-b:rgba(0,190,75,.12);
+  --card-inner:rgba(0,230,118,.08); --card-shine:rgba(0,255,130,.07);
+  --card-hbg:rgba(0,230,118,.09); --card-hb:rgba(0,230,118,.32); --card-glow:rgba(0,230,118,.18);
+  --btn:linear-gradient(135deg,#009948,#00e676); --btn-c:#001a0a;
+  --btn-ib:rgba(162,89,255,.30); --btn-ic:#a259ff;
+  --sec-c:#a259ff; --bar:#00e676;
+  --tag-bg:linear-gradient(135deg,#7c3aed,#4c1d95); --tag-gl:rgba(124,58,237,.45);
+  --shine:linear-gradient(105deg,#003d18 0%,#009948 13%,#00ee80 27%,#aaffcc 36%,#00e676 50%,#009040 64%,#00e876 78%,#aaffcc 89%,#002e12 100%);
+  --lw:#00e676; --lg:rgba(0,230,118,.75);
+  --menu-bg:rgba(2,8,3,.97); --menu-b:rgba(0,190,80,.15);
+  --td:rgba(180,255,200,.26); --ts:rgba(200,255,215,.50);
+  --pkg-sel-bg:rgba(0,230,118,.15); --pkg-sel-b:#00e676;
+  --input-bg:rgba(0,230,118,.05); --input-b:rgba(0,190,80,.18);
+  --chk-bg:rgba(2,8,3,.96); --chk-b:rgba(0,190,80,.25);
+}
+body.th-gd {
+  --ac:#ffd700; --ac2:#ff8c00;
+  --ac-glow:rgba(255,210,0,.32); --ac-dim:rgba(255,200,0,.10); --ac-soft:rgba(255,200,0,.06);
+  --bg:#080600;
+  --bg-mesh:radial-gradient(ellipse 55% 40% at 12% 18%,rgba(140,90,0,.18) 0%,transparent 62%),radial-gradient(ellipse 48% 44% at 88% 82%,rgba(110,45,0,.13) 0%,transparent 62%),linear-gradient(170deg,#070500 0%,#110900 50%,#090600 100%);
+  --grid:rgba(200,155,0,.020);
+  --card-bg:rgba(26,16,0,.60); --card-b:rgba(200,150,0,.14);
+  --card-inner:rgba(255,200,0,.08); --card-shine:rgba(255,230,100,.07);
+  --card-hbg:rgba(255,200,0,.09); --card-hb:rgba(255,200,0,.32); --card-glow:rgba(255,200,0,.18);
+  --btn:linear-gradient(135deg,#8a6000,#ffd700,#ffe566,#ffd700,#8a6000); --btn-c:#1a0d00;
+  --btn-ib:rgba(255,140,0,.30); --btn-ic:#ff8c00;
+  --sec-c:#ff8c00; --bar:#ffd700;
+  --tag-bg:linear-gradient(135deg,#5b21b6,#3b0e8c); --tag-gl:rgba(91,33,182,.45);
+  --shine:linear-gradient(105deg,#4a3000 0%,#a87800 13%,#ffe060 26%,#fffacc 35%,#ffd700 48%,#a07800 62%,#ffe060 76%,#fffccc 87%,#4a3000 100%);
+  --lw:#ffd700; --lg:rgba(255,215,0,.75);
+  --menu-bg:rgba(9,6,0,.97); --menu-b:rgba(200,150,0,.16);
+  --td:rgba(255,220,100,.28); --ts:rgba(255,225,130,.52);
+  --pkg-sel-bg:rgba(255,200,0,.15); --pkg-sel-b:#ffd700;
+  --input-bg:rgba(255,200,0,.05); --input-b:rgba(200,150,0,.18);
+  --chk-bg:rgba(9,6,0,.96); --chk-b:rgba(200,150,0,.25);
+}
+body.th-cv {
+  --ac:#c84bff; --ac2:#ff2eb8;
+  --ac-glow:rgba(200,75,255,.32); --ac-dim:rgba(200,75,255,.10); --ac-soft:rgba(200,75,255,.06);
+  --bg:#080010;
+  --bg-mesh:radial-gradient(ellipse 55% 40% at 12% 18%,rgba(120,0,200,.24) 0%,transparent 62%),radial-gradient(ellipse 48% 44% at 88% 82%,rgba(200,0,120,.16) 0%,transparent 62%),linear-gradient(170deg,#060008 0%,#0e0018 50%,#07000e 100%);
+  --grid:rgba(180,50,255,.022);
+  --card-bg:rgba(40,0,60,.55); --card-b:rgba(180,50,255,.14);
+  --card-inner:rgba(200,75,255,.09); --card-shine:rgba(255,150,255,.07);
+  --card-hbg:rgba(200,75,255,.10); --card-hb:rgba(200,75,255,.34); --card-glow:rgba(200,75,255,.20);
+  --btn:linear-gradient(135deg,#8800cc,#c84bff,#ff2eb8); --btn-c:#0d0018;
+  --btn-ib:rgba(255,46,184,.30); --btn-ic:#ff2eb8;
+  --sec-c:#ff2eb8; --bar:#c84bff;
+  --tag-bg:linear-gradient(135deg,#ff2eb8,#c84bff); --tag-gl:rgba(255,46,184,.45);
+  --shine:linear-gradient(105deg,#3a004a 0%,#8800bb 13%,#e060ff 27%,#ffccff 36%,#c84bff 50%,#8800bb 64%,#e060ff 78%,#ffccff 88%,#3a004a 100%);
+  --lw:#c84bff; --lg:rgba(200,75,255,.78);
+  --menu-bg:rgba(6,0,12,.97); --menu-b:rgba(160,40,220,.16);
+  --td:rgba(240,180,255,.28); --ts:rgba(245,200,255,.52);
+  --pkg-sel-bg:rgba(200,75,255,.15); --pkg-sel-b:#c84bff;
+  --input-bg:rgba(200,75,255,.05); --input-b:rgba(160,40,220,.18);
+  --chk-bg:rgba(6,0,12,.96); --chk-b:rgba(160,40,220,.25);
+}
+body.th-ai {
+  --ac:#a8d8ff; --ac2:#60b4ff;
+  --ac-glow:rgba(168,216,255,.30); --ac-dim:rgba(168,216,255,.10); --ac-soft:rgba(168,216,255,.06);
+  --bg:#060e18;
+  --bg-mesh:radial-gradient(ellipse 55% 40% at 12% 18%,rgba(80,160,240,.18) 0%,transparent 62%),radial-gradient(ellipse 48% 44% at 88% 82%,rgba(40,100,200,.13) 0%,transparent 62%),linear-gradient(170deg,#050c14 0%,#0a1828 50%,#060d18 100%);
+  --grid:rgba(120,190,255,.022);
+  --card-bg:rgba(140,200,255,.07); --card-b:rgba(160,220,255,.16);
+  --card-inner:rgba(168,216,255,.09); --card-shine:rgba(220,240,255,.09);
+  --card-hbg:rgba(168,216,255,.10); --card-hb:rgba(168,216,255,.36); --card-glow:rgba(168,216,255,.22);
+  --btn:linear-gradient(135deg,#3a90d0,#a8d8ff,#e8f6ff,#a8d8ff,#3a90d0); --btn-c:#020a14;
+  --btn-ib:rgba(96,180,255,.30); --btn-ic:#60b4ff;
+  --sec-c:#60b4ff; --bar:#a8d8ff;
+  --tag-bg:linear-gradient(135deg,#1a5a9a,#0e3a6e); --tag-gl:rgba(26,90,154,.50);
+  --shine:linear-gradient(105deg,#1a3a60 0%,#5090c8 13%,#c0deff 26%,#f0f8ff 36%,#a8d8ff 50%,#5090c8 64%,#c0e0ff 78%,#f0f8ff 88%,#1a3a60 100%);
+  --lw:#a8d8ff; --lg:rgba(168,216,255,.72);
+  --menu-bg:rgba(5,10,20,.97); --menu-b:rgba(120,190,255,.18);
+  --td:rgba(180,220,255,.30); --ts:rgba(200,230,255,.55);
+  --pkg-sel-bg:rgba(168,216,255,.15); --pkg-sel-b:#a8d8ff;
+  --input-bg:rgba(168,216,255,.05); --input-b:rgba(120,190,255,.18);
+  --chk-bg:rgba(5,10,20,.96); --chk-b:rgba(120,190,255,.25);
+}
+body.th-cr {
+  --ac:#ff2233; --ac2:#ff6600;
+  --ac-glow:rgba(255,34,51,.32); --ac-dim:rgba(255,34,51,.10); --ac-soft:rgba(255,34,51,.06);
+  --bg:#0e0202;
+  --bg-mesh:radial-gradient(ellipse 55% 40% at 12% 18%,rgba(160,10,10,.24) 0%,transparent 62%),radial-gradient(ellipse 48% 44% at 88% 82%,rgba(120,30,0,.17) 0%,transparent 62%),linear-gradient(170deg,#0a0101 0%,#180303 50%,#0e0202 100%);
+  --grid:rgba(255,30,30,.020);
+  --card-bg:rgba(40,0,0,.55); --card-b:rgba(220,30,30,.14);
+  --card-inner:rgba(255,34,51,.08); --card-shine:rgba(255,120,120,.07);
+  --card-hbg:rgba(255,34,51,.09); --card-hb:rgba(255,34,51,.34); --card-glow:rgba(255,34,51,.20);
+  --btn:linear-gradient(135deg,#aa0010,#ff2233,#ff6060); --btn-c:#1a0000;
+  --btn-ib:rgba(255,102,0,.30); --btn-ic:#ff6600;
+  --sec-c:#ff6600; --bar:#ff2233;
+  --tag-bg:linear-gradient(135deg,#991100,#5a0000); --tag-gl:rgba(180,20,0,.50);
+  --shine:linear-gradient(105deg,#4a0000 0%,#aa1010 13%,#ff6060 26%,#ffcccc 36%,#ff2233 50%,#aa1010 64%,#ff5050 78%,#ffcccc 88%,#4a0000 100%);
+  --lw:#ff2233; --lg:rgba(255,34,51,.78);
+  --menu-bg:rgba(10,1,1,.97); --menu-b:rgba(200,20,20,.16);
+  --td:rgba(255,180,180,.28); --ts:rgba(255,195,195,.52);
+  --pkg-sel-bg:rgba(255,34,51,.15); --pkg-sel-b:#ff2233;
+  --input-bg:rgba(255,34,51,.05); --input-b:rgba(200,20,20,.18);
+  --chk-bg:rgba(10,1,1,.96); --chk-b:rgba(200,20,20,.25);
+}
+
+/* ══════════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{
+  background:var(--bg);color:var(--txt);
+  font-family:'Orbitron',sans-serif;
+  overflow-x:hidden;min-height:100vh;
+  transition:background .3s;
+  scroll-behavior:smooth;
+}
+.kh{font-family:'Kantumruy Pro',sans-serif!important}
+
+/* mesh */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:var(--bg-mesh);transition:background .4s;
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:54px 54px;
+  mask-image:radial-gradient(ellipse 82% 82% at 50% 50%,#000 0%,transparent 100%);
+}
+#wrap{transition:filter .14s ease}
+#wrap.blr{filter:blur(8px)}
+
+/* ══════════════════════════════════════════════════
+   SPLASH
+══════════════════════════════════════════════════ */
+#splash{
+  position:fixed;inset:0;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:9000;gap:10px;
+  transition:opacity .65s ease,transform .65s ease;
+}
+#splash.out{opacity:0;transform:scale(1.05);pointer-events:none}
+#sw{font-size:clamp(.9rem,3.4vw,1.3rem);color:#ff2233;letter-spacing:3px;font-weight:700;opacity:0;transform:translateY(-52px);transition:opacity .5s,transform .5s cubic-bezier(.34,1.56,.64,1)}
+#sw.in{opacity:1;transform:none}
+#sl{display:flex;flex-direction:column;align-items:center;opacity:0;transform:translateY(52px);transition:opacity .5s,transform .5s cubic-bezier(.34,1.56,.64,1)}
+#sl.in{opacity:1;transform:none}
+
+/* ══════════════════════════════════════════════════
+   CHROME LOGO
+══════════════════════════════════════════════════ */
+.chrome{font-weight:900;letter-spacing:5px;background:var(--shine);background-size:250% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shim 2.5s linear infinite}
+.chrome .cw{-webkit-text-fill-color:var(--lw);background:none;animation:none;filter:drop-shadow(0 0 9px var(--lg));transition:-webkit-text-fill-color .4s,filter .4s}
+@keyframes shim{0%{background-position:250% 0}100%{background-position:-250% 0}}
+.ltag{font-size:.45rem;letter-spacing:5px;color:var(--td);margin-top:3px;text-align:center;transition:color .4s}
+
+/* ══════════════════════════════════════════════════
+   DYNAMIC ISLAND
+══════════════════════════════════════════════════ */
+#di{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:#030306;border-radius:40px;width:72px;height:20px;z-index:7000;overflow:hidden;transition:width .44s cubic-bezier(.34,1.2,.64,1),height .44s cubic-bezier(.34,1.2,.64,1),box-shadow .4s,opacity .44s,border-color .4s,background .4s;box-shadow:0 0 0 1px rgba(255,255,255,.06)}
+#di.pop{width:188px;height:36px;border-radius:18px;background:var(--menu-bg);border:1px solid var(--menu-b);box-shadow:0 0 14px var(--ac-glow)}
+#di.gone{opacity:0;pointer-events:none}
+#dii{display:flex;align-items:center;gap:7px;padding:0 12px;height:100%;opacity:0;transition:opacity .2s ease .17s;white-space:nowrap}
+#di.pop #dii{opacity:1}
+.ddot{width:5px;height:5px;border-radius:50%;background:#00ff88;box-shadow:0 0 5px #00ff88;flex-shrink:0;animation:dpls 1.8s ease infinite}
+@keyframes dpls{0%,100%{opacity:1}50%{opacity:.28}}
+.dtxt{font-size:.55rem;letter-spacing:1px;color:var(--ac);transition:color .4s}
+
+/* ══════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════ */
+nav{position:relative;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:clamp(14px,3.5vw,24px) clamp(14px,5vw,28px) 10px}
+.nl .chrome{font-size:clamp(1.1rem,3.8vw,1.7rem);letter-spacing:4px}
+.nl .ltag{font-size:.42rem;letter-spacing:5px;margin-top:2px}
+.hbg{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:36px;height:36px;background:var(--card-bg);border:1px solid var(--card-b);border-radius:9px;cursor:pointer;flex-shrink:0;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background .25s,box-shadow .25s,transform .18s,border-color .4s;align-self:center}
+.hbg:hover{background:var(--ac-dim);box-shadow:0 0 14px var(--ac-glow);transform:scale(1.06)}
+.hbg span{display:block;width:17px;height:1.6px;background:var(--ac);border-radius:2px;box-shadow:0 0 4px var(--ac);transition:all .3s cubic-bezier(.34,1.3,.64,1),background .4s,box-shadow .4s}
+.hbg.open span:nth-child(1){transform:translateY(6.6px) rotate(45deg)}
+.hbg.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hbg.open span:nth-child(3){transform:translateY(-6.6px) rotate(-45deg)}
+
+/* ══════════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════════ */
+#ov{position:fixed;inset:0;z-index:380;background:rgba(0,0,0,0);pointer-events:none;transition:background .3s}
+#ov.on{background:rgba(0,0,0,.52);pointer-events:all}
+#menu{position:fixed;top:0;right:-245px;width:min(225px,76vw);height:100vh;background:var(--menu-bg);border-left:1px solid var(--menu-b);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);z-index:400;transition:right .38s cubic-bezier(.34,1.1,.64,1),background .4s,border-color .4s;display:flex;flex-direction:column;overflow:hidden;box-shadow:-5px 0 28px rgba(0,0,0,.55)}
+#menu.open{right:0}
+.mhd{display:flex;align-items:center;justify-content:space-between;padding:15px 13px 12px;border-bottom:1px solid var(--menu-b);transition:border-color .4s}
+.mhd-t{font-size:.58rem;letter-spacing:3px;color:var(--ac);transition:color .4s}
+.mcl{width:23px;height:23px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border:1px solid var(--card-b);border-radius:5px;cursor:pointer;font-size:.68rem;color:var(--ts);transition:background .2s,transform .18s,color .4s,border-color .4s}
+.mcl:hover{background:rgba(255,34,51,.15);color:#ff4455;transform:scale(1.1)}
+.msec{padding:11px 13px 0}
+.mslbl{font-size:.48rem;letter-spacing:3px;color:var(--td);margin-bottom:7px;display:flex;align-items:center;gap:6px;transition:color .4s}
+.mslbl::after{content:'';flex:1;height:1px;background:var(--menu-b);transition:background .4s}
+.lrow{display:flex;gap:5px;margin-bottom:13px}
+.lo{flex:1;padding:6px 0;text-align:center;border-radius:40px;border:1px solid var(--card-b);background:var(--card-bg);cursor:pointer;font-size:.58rem;letter-spacing:1.5px;color:var(--ts);font-family:'Orbitron',sans-serif;transition:background .22s,color .22s,box-shadow .22s,border-color .4s}
+.lo.kl{font-family:'Kantumruy Pro',sans-serif!important;font-size:.68rem;letter-spacing:0}
+.lo:hover{background:rgba(255,255,255,.09);color:var(--txt)}
+.lo.on{background:var(--btn);color:var(--btn-c);border-color:transparent;font-weight:700;box-shadow:0 0 12px var(--ac-glow)}
+.tlist{display:flex;flex-direction:column;gap:4px;margin-bottom:13px}
+.to{display:flex;align-items:center;padding:8px 11px;border-radius:8px;border:1px solid transparent;background:transparent;cursor:pointer;transition:background .22s,border-color .25s,box-shadow .25s}
+.to:hover{background:rgba(255,255,255,.07)}
+.to.on{background:var(--ac-dim);border-color:var(--ac);box-shadow:inset 0 0 16px var(--ac-soft),0 0 10px var(--ac-glow)}
+.ton{font-size:.60rem;letter-spacing:1.5px;color:var(--txt);transition:color .4s,font-weight .2s}
+.to.on .ton{color:var(--ac);font-weight:700}
+.mft{margin-top:auto;padding:11px 13px;border-top:1px solid var(--menu-b);font-size:.42rem;letter-spacing:2.5px;color:var(--td);text-align:center;transition:color .4s,border-color .4s}
+
+/* ══════════════════════════════════════════════════
+   HOME PAGE
+══════════════════════════════════════════════════ */
+#homeView{position:relative;z-index:1}
+.shd{display:flex;align-items:center;gap:8px;padding:0 clamp(14px,5vw,28px) 12px;font-size:clamp(.70rem,2.2vw,.84rem);letter-spacing:2px;color:var(--sec-c);transition:color .4s}
+.shd::before{content:'';display:block;width:3px;height:15px;background:var(--bar);border-radius:2px;box-shadow:0 0 8px var(--bar);transition:background .4s,box-shadow .4s}
+.sdots{color:var(--td);font-size:1rem;margin-left:auto}
+.gw{padding:0 clamp(12px,4vw,24px) 52px;max-width:800px;margin:0 auto}
+.gr{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,2vw,12px)}
+@media(max-width:560px){
+  .gw{display:flex;justify-content:center}
+  .gr{grid-template-columns:repeat(2,1fr);width:min(340px,100%);gap:10px}
+}
+/* game card */
+.card{position:relative;background:var(--card-bg);border:1px solid var(--card-b);border-radius:20px;box-shadow:inset 0 1px 0 var(--card-shine),inset 0 0 22px var(--card-inner),0 4px 24px rgba(0,0,0,.38);padding:11px 9px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);cursor:pointer;overflow:hidden;transition:transform .3s cubic-bezier(.34,1.3,.64,1),box-shadow .3s,border-color .3s,background .4s;opacity:0;transform:translateY(20px) scale(.94);animation:cin .45s ease forwards}
+.card::before{content:'';position:absolute;inset:0;border-radius:20px;pointer-events:none;background:linear-gradient(138deg,rgba(255,255,255,.09) 0%,rgba(255,255,255,.02) 45%,transparent 70%)}
+.card::after{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--ac),transparent);opacity:.45;border-radius:1px;transition:background .4s}
+.card:hover{transform:scale(1.05) translateY(-4px);box-shadow:inset 0 1px 0 var(--card-shine),inset 0 0 30px var(--card-inner),0 8px 32px var(--card-glow),0 0 0 1px var(--card-hb);border-color:var(--card-hb);background:var(--card-hbg)}
+.card.soon:hover{transform:scale(1.02) translateY(-2px)}
+@keyframes cin{from{opacity:0;transform:translateY(20px) scale(.94)}to{opacity:1;transform:none}}
+.card:nth-child(1){animation-delay:.07s}.card:nth-child(2){animation-delay:.16s}.card:nth-child(3){animation-delay:.25s}.card:nth-child(4){animation-delay:.34s}
+.stag{position:absolute;top:-1px;right:-1px;padding:3px 8px;border-radius:0 20px 0 9px;font-size:.50rem;letter-spacing:1px;font-weight:700;background:var(--tag-bg);box-shadow:0 0 10px var(--tag-gl);z-index:2;transition:background .4s,box-shadow .4s}
+.ib{width:100%;aspect-ratio:1;border-radius:13px;overflow:hidden;border:1px solid rgba(255,255,255,.06);flex-shrink:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}
+.ib img{width:100%;height:100%;object-fit:cover;display:block}
+.ib .em{font-size:clamp(1.8rem,7vw,2.8rem)}
+.gn{font-size:clamp(.50rem,1.5vw,.60rem);letter-spacing:1.6px;font-weight:700;color:rgba(255,255,255,.82);text-align:center;line-height:1.4;min-height:2.2em;display:flex;align-items:center;justify-content:center}
+.tb{width:100%;padding:7px 0;border-radius:40px;border:none;font-size:clamp(.51rem,1.5vw,.62rem);font-weight:700;letter-spacing:1.6px;cursor:pointer;margin-top:auto;transition:background .28s,box-shadow .28s,transform .2s,border-color .4s,color .4s}
+.tb.act{font-family:'Orbitron',sans-serif;background:var(--btn);color:var(--btn-c);box-shadow:0 3px 14px var(--card-glow)}
+.tb.act:hover{box-shadow:0 0 22px var(--ac-glow);transform:scale(1.04)}
+.tb.ina{font-family:'Orbitron',sans-serif;background:transparent;border:1px solid var(--btn-ib);color:var(--btn-ic)}
+.tb.ina:hover{background:var(--ac-soft)}
+.tb.ka{font-family:'Kantumruy Pro',sans-serif!important;font-size:clamp(.58rem,1.9vw,.70rem);letter-spacing:0;background:var(--btn);color:var(--btn-c);box-shadow:0 3px 14px var(--card-glow)}
+.tb.ka:hover{box-shadow:0 0 22px var(--ac-glow);transform:scale(1.04)}
+.tb.ki{font-family:'Kantumruy Pro',sans-serif!important;font-size:clamp(.58rem,1.9vw,.70rem);letter-spacing:0;background:transparent;border:1px solid var(--btn-ib);color:var(--btn-ic)}
+
+/* ══════════════════════════════════════════════════
+   TOPUP PAGE
+══════════════════════════════════════════════════ */
+#topupView{display:none;position:relative;z-index:1;padding:0 clamp(12px,4vw,20px) 110px;max-width:600px;margin:0 auto;animation:slideUp .4s cubic-bezier(.16,1,.3,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--card-bg);border:1px solid var(--card-b);
+  color:var(--txt);padding:8px 16px;border-radius:40px;
+  font-size:.65rem;letter-spacing:1px;cursor:pointer;
+  margin-bottom:14px;backdrop-filter:blur(12px);
+  transition:background .2s,transform .2s,border-color .4s;
+  font-family:'Kantumruy Pro',sans-serif;
+}
+.back-btn:hover{background:var(--ac-dim);transform:translateX(-4px)}
+
+/* game detail header */
+.gdh{display:flex;align-items:center;gap:14px;background:var(--card-bg);border:1px solid var(--card-b);padding:14px;border-radius:20px;margin-bottom:14px;backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 var(--card-shine),0 0 20px var(--card-inner);transition:background .4s,border-color .4s}
+.gdh img{width:64px;height:64px;border-radius:15px;object-fit:cover;border:1px solid var(--card-b);flex-shrink:0}
+.gdh-emi{width:64px;height:64px;border-radius:15px;background:rgba(0,0,0,.3);display:none;align-items:center;justify-content:center;font-size:2.2rem;flex-shrink:0}
+.gdh-info h2{font-size:.85rem;color:var(--ac);font-weight:700;margin-bottom:4px;transition:color .4s}
+.gdh-info p{font-size:.62rem;color:var(--td);font-family:'Kantumruy Pro',sans-serif;line-height:1.5;transition:color .4s}
+
+/* input section */
+.sec-box{background:var(--card-bg);border:1px solid var(--card-b);padding:16px 14px;border-radius:18px;margin-bottom:12px;backdrop-filter:blur(16px);transition:background .4s,border-color .4s}
+.sec-box h3{font-size:.72rem;margin-bottom:12px;color:var(--txt);font-family:'Kantumruy Pro',sans-serif;font-weight:700;letter-spacing:.5px}
+.inp-grp{display:flex;flex-direction:column;gap:10px}
+.inp-grp input{
+  width:100%;padding:13px 16px;border-radius:14px;
+  background:var(--input-bg);border:1px solid var(--input-b);
+  color:var(--txt);font-size:.85rem;text-align:center;
+  font-family:'Kantumruy Pro',sans-serif;letter-spacing:.5px;
+  outline:none;
+  transition:border-color .3s,box-shadow .3s,background .4s;
+}
+.inp-grp input::placeholder{color:var(--td)}
+.inp-grp input:focus{border-color:var(--ac);box-shadow:0 0 14px var(--ac-glow);background:var(--ac-soft)}
+
+/* package grid */
+.pkg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.pkg-card{
+  background:linear-gradient(135deg,var(--card-bg),rgba(255,255,255,.02));
+  border:1px solid var(--card-b);border-radius:14px;
+  padding:11px 10px;display:flex;align-items:center;
+  position:relative;cursor:pointer;min-height:72px;overflow:hidden;
+  transition:all .3s cubic-bezier(.25,.46,.45,.94);
+  animation:cin .4s cubic-bezier(.16,1,.3,1) backwards;
+}
+.pkg-card:hover{background:var(--card-hbg);transform:translateY(-3px);box-shadow:0 6px 20px var(--card-glow)}
+.pkg-card:active{transform:scale(.95)}
+.pkg-card.sel{border-color:var(--pkg-sel-b);background:var(--pkg-sel-bg);box-shadow:0 0 16px var(--ac-glow);transform:translateY(-3px) scale(1.02)}
+.pkg-ico{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-right:9px;overflow:hidden;transition:transform .3s}
+.pkg-card:hover .pkg-ico{transform:scale(1.1) rotate(5deg)}
+.pkg-card.sel .pkg-ico{transform:scale(1.15) rotate(10deg)}
+.pkg-ico img{width:100%;height:100%;object-fit:contain;padding:4px}
+.pkg-ico .pkg-em{font-size:1.3rem}
+.pkg-info{display:flex;flex-direction:column;align-items:flex-end;text-align:right;width:100%;overflow:hidden}
+.pkg-sub{font-size:.55rem;color:var(--ts);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;font-family:'Kantumruy Pro',sans-serif}
+.pkg-price{font-size:.95rem;font-weight:800;color:var(--ac);margin-bottom:1px;transition:color .4s}
+.pkg-card.sel .pkg-price{text-shadow:0 0 10px var(--ac-glow)}
+.pkg-desc{font-size:.58rem;color:var(--td);font-weight:600}
+.pkg-badge{position:absolute;top:3px;right:7px;font-size:.52rem;color:var(--ac2);font-style:italic;font-weight:800;transition:color .4s}
+
+/* checkout bar */
+#checkoutBar{
+  position:fixed;bottom:-110px;left:50%;transform:translateX(-50%);
+  width:100%;max-width:600px;
+  background:var(--chk-bg);
+  backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);
+  border-top:1px solid var(--ac);
+  padding:14px 20px;display:flex;justify-content:space-between;align-items:center;
+  z-index:1000;border-radius:24px 24px 0 0;
+  transition:bottom .5s cubic-bezier(.175,.885,.32,1.275),background .4s,border-color .4s;
+  box-shadow:0 -5px 30px var(--ac-glow);
+}
+#checkoutBar.show{bottom:0}
+.chk-info{display:flex;flex-direction:column}
+.chk-name{color:var(--ts);font-size:.7rem;font-family:'Kantumruy Pro',sans-serif;margin-bottom:2px}
+.chk-price{color:var(--ac);font-size:1.3rem;font-weight:900;letter-spacing:.5px;transition:color .4s,transform .3s}
+#checkoutBar.pop .chk-price{transform:scale(1.1)}
+.buy-btn{
+  background:var(--btn);color:var(--btn-c);
+  border:none;padding:12px 32px;border-radius:14px;
+  font-weight:900;font-size:.9rem;cursor:pointer;
+  font-family:'Orbitron',sans-serif;letter-spacing:1px;
+  transition:all .3s cubic-bezier(.175,.885,.32,1.275),background .4s;
+}
+.buy-btn:hover{transform:translateY(-3px);box-shadow:0 5px 20px var(--ac-glow)}
+.buy-btn:active{transform:scale(.9)}
+
+/* toasts */
+.toast{position:fixed;top:-80px;left:50%;transform:translateX(-50%);color:#fff;padding:11px 22px;border-radius:20px;font-weight:700;font-size:.82rem;z-index:10001;transition:top .5s cubic-bezier(.175,.885,.32,1.275);white-space:nowrap;font-family:'Kantumruy Pro',sans-serif}
+.toast.err{background:rgba(220,30,30,.95);box-shadow:0 8px 24px rgba(220,30,30,.35)}
+.toast.info{background:var(--btn);color:var(--btn-c);box-shadow:0 8px 24px var(--ac-glow)}
+.toast.show{top:52px}
+
+/* app wrapper */
+#app{opacity:0;transition:opacity .7s}
+#app.show{opacity:1}
+</style>
 </head>
 <body>
 
-    <audio id="clickSound" src="Sound_thoch.mp3" preload="auto"></audio>
+<!-- SPLASH -->
+<div id="splash">
+  <div id="sw">WELCOME TO</div>
+  <div id="sl">
+    <div class="chrome" style="font-size:clamp(1.9rem,6.5vw,2.9rem);letter-spacing:6px">YUPAI <span class="cw">STORE</span></div>
+    <div class="ltag">G A M E &nbsp;·&nbsp; T O P - U P</div>
+  </div>
+</div>
 
-    <div class="error-toast" id="errorToast">សូមបញ្ចូលព័ត៌មានឱ្យបានត្រឹមត្រូវ!</div>
-    <div class="info-toast" id="infoToast">cooming soon មកដល់ឆាប់ៗ</div>
+<!-- DYNAMIC ISLAND -->
+<div id="di"><div id="dii"><div class="ddot"></div><div class="dtxt" id="dtx">Online ✦</div></div></div>
 
-    <header>
-        <div class="logo">
-            <div class="logo-top">YUPAI <span>STORE</span></div>
-            <div class="logo-sub">Game Top-Up Platform</div>
-        </div>
-    </header>
+<!-- OVERLAY + SIDEBAR -->
+<div id="ov" onclick="cMenu()"></div>
+<div id="menu">
+  <div class="mhd"><div class="mhd-t">MENU</div><div class="mcl" onclick="cMenu()">✕</div></div>
+  <div class="msec">
+    <div class="mslbl" id="ml">LANGUAGE</div>
+    <div class="lrow">
+      <button class="lo kl on" id="okh" onclick="sLang('kh')">ខ្មែរ</button>
+      <button class="lo" id="oen" onclick="sLang('en')">English</button>
+    </div>
+    <div class="mslbl" id="mt">THEME</div>
+    <div class="tlist">
+      <div class="to" id="th-em" onclick="sTheme('th-em')"><span class="ton">Emerald</span></div>
+      <div class="to" id="th-gd" onclick="sTheme('th-gd')"><span class="ton">Luxury Gold</span></div>
+      <div class="to" id="th-cv" onclick="sTheme('th-cv')"><span class="ton">Cyber Violet</span></div>
+      <div class="to" id="th-ai" onclick="sTheme('th-ai')"><span class="ton">Arctic Ice</span></div>
+      <div class="to" id="th-cr" onclick="sTheme('th-cr')"><span class="ton">Crimson Red</span></div>
+    </div>
+  </div>
+  <div class="mft">YUPAI STORE · GAME TOP-UP</div>
+</div>
 
-    <div class="container">
+<!-- APP -->
+<div id="app">
+  <div id="wrap">
+    <nav>
+      <div class="nl">
+        <div class="chrome" style="font-size:clamp(1.1rem,3.8vw,1.7rem);letter-spacing:4px">YUPAI <span class="cw">STORE</span></div>
+        <div class="ltag">G A M E &nbsp;·&nbsp; T O P - U P</div>
+      </div>
+      <div class="hbg" id="hbg" onclick="tMenu()"><span></span><span></span><span></span></div>
+    </nav>
 
-        <div id="homeView" class="view-section">
-            <div class="section-label"><span>Select Game</span></div>
-            <div class="game-grid">
-                <div class="game-card" onclick="openTopup('MLBB')">
-                    <div class="game-icon-box"><img src="MLBB.png" alt="MLBB"></div>
-                    <div class="game-title">Mobile Legends</div>
-                    <button class="topup-btn">TOP UP</button>
-                </div>
-
-                <div class="game-card" onclick="openTopup('FF')">
-                    <div class="game-icon-box"><img src="FF.png" alt="FF"></div>
-                    <div class="game-title">Free Fire</div>
-                    <button class="topup-btn">TOP UP</button>
-                </div>
-
-                <div class="game-card soon" onclick="showInfo('cooming soon មកដល់ឆាប់ៗ')">
-                    <span class="coming-badge">Soon</span>
-                    <div class="game-icon-box"><img src="HOK.png" alt="HOK"></div>
-                    <div class="game-title">Honor of Kings</div>
-                    <button class="topup-btn">COMING SOON</button>
-                </div>
-
-                <div class="game-card soon" onclick="showInfo('cooming soon មកដល់ឆាប់ៗ')">
-                    <span class="coming-badge">Soon</span>
-                    <div class="game-icon-box"><img src="MCGG.png" alt="MCGG"></div>
-                    <div class="game-title">Magic Chess: Go Go</div>
-                    <button class="topup-btn">COMING SOON</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="topupView" class="view-section" style="display: none;">
-            <button class="back-btn" onclick="goHome()">
-                <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-                ត្រឡប់ក្រោយ
-            </button>
-
-            <div class="game-detail-header" id="gameDetailHeader"></div>
-
-            <div class="box-section">
-                <h3>បញ្ចូល User ID</h3>
-                <div class="input-group" id="inputContainer"></div>
-            </div>
-
-            <div class="box-section">
-                <h3>ជ្រើសរើសកញ្ចប់</h3>
-                <div class="package-grid" id="packageContainer"></div>
-            </div>
-        </div>
-
+    <!-- HOME -->
+    <div id="homeView">
+      <div class="shd"><span id="stl" class="kh">ជ្រើសរើសហ្គេម</span><span class="sdots">⋮</span></div>
+      <div class="gw"><div class="gr" id="gr"></div></div>
     </div>
 
-    <div class="checkout-bar" id="checkoutBar">
-        <div class="checkout-details">
-            <span class="checkout-name" id="selectedName">បានជ្រើសរើស: 0 កញ្ចប់</span>
-            <span class="checkout-price" id="selectedPrice">$0.00</span>
-        </div>
-        <button class="buy-btn" onclick="processCheckout()">Buy Now</button>
+    <!-- TOPUP PAGE -->
+    <div id="topupView">
+      <button class="back-btn" id="backBtn" onclick="goHome()">⬅ <span id="backTxt">ត្រឡប់ក្រោយ</span></button>
+      <div class="gdh" id="gdh"></div>
+      <div class="sec-box">
+        <h3 id="idLabel">បញ្ចូល User ID</h3>
+        <div class="inp-grp" id="inputContainer"></div>
+      </div>
+      <div class="sec-box">
+        <h3 id="pkgLabel">ជ្រើសរើសកញ្ចប់</h3>
+        <div class="pkg-grid" id="pkgContainer"></div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <script>
-        const clickSound = document.getElementById('clickSound');
-        const homeView = document.getElementById('homeView');
-        const topupView = document.getElementById('topupView');
-        const checkoutBar = document.getElementById('checkoutBar');
+<!-- CHECKOUT BAR -->
+<div id="checkoutBar">
+  <div class="chk-info">
+    <span class="chk-name" id="chkName">បានជ្រើសរើស: 0 កញ្ចប់</span>
+    <span class="chk-price" id="chkPrice">$0.00</span>
+  </div>
+  <button class="buy-btn" id="buyBtn" onclick="processCheckout()">BUY</button>
+</div>
 
-        const selectedNameText = document.getElementById('selectedName');
-        const selectedPriceText = document.getElementById('selectedPrice');
-        const gameDetailHeader = document.getElementById('gameDetailHeader');
-        const inputContainer = document.getElementById('inputContainer');
-        const packageContainer = document.getElementById('packageContainer');
+<!-- TOASTS -->
+<div class="toast err" id="errToast"></div>
+<div class="toast info" id="infoToast"></div>
 
-        let selectedPackages = [];
-        let currentGame = '';
+<audio id="snd" src="Sound_thoch.mp3" preload="auto"></audio>
 
-        // MLBB Packages
-        const mlbbPackages = [
-            { img: 'WeeklyPass.png', name: 'WeeklyPass X1', price: '$1.59' },
-            { img: 'WeeklyPass.png', name: 'WeeklyPass x2', price: '$3.15' },
-            { img: 'WeeklyPass.png', name: 'WeeklyPass X3', price: '$4.65' },
-            { img: 'Diamond.png', name: '50+50 Diamonds', price: '$1.00', badge: 'ពេជ្រ X2' },
-            { img: 'Diamond.png', name: '150+150 Diamonds', price: '$2.55', badge: 'ពេជ្រ X2' },
-            { img: 'Diamond.png', name: '250+250 Diamonds', price: '$3.95', badge: 'ពេជ្រ X2' },
-            { img: 'Diamond.png', name: '500+500 Diamonds', price: '$7.77', badge: 'ពេជ្រ X2' },
-            { img: 'Diamond.png', name: '22 Diamonds', price: '$0.55' },
-            { img: 'Diamond.png', name: '55 Diamonds', price: '$0.89' },
-            { img: 'Diamond.png', name: '86 Diamonds', price: '$1.35' },
-            { img: 'Diamond.png', name: '110 Diamonds', price: '$1.89' },
-            { img: 'Diamond.png', name: '165 Diamonds', price: '$2.55' },
-            { img: 'Diamond.png', name: '257 Diamonds', price: '$3.65' },
-            { img: 'Diamond.png', name: '343 Diamonds', price: '$4.89' },
-            { img: 'Diamond.png', name: '429 Diamonds', price: '$6.00' },
-            { img: 'Diamond.png', name: '514 Diamonds', price: '$7.15' },
-            { img: 'Diamond.png', name: '565 Diamonds', price: '$7.65' },
-            { img: 'Diamond.png', name: '600 Diamonds', price: '$8.55' },
-            { img: 'Diamond.png', name: '706 Diamonds', price: '$9.85' },
-            { img: 'Diamond.png', name: '878 Diamonds', price: '$11.85' },
-            { img: 'Diamond.png', name: '963 Diamonds', price: '$13.45' },
-            { img: 'Diamond.png', name: '1049 Diamonds', price: '$14.75' },
-            { img: 'Diamond.png', name: '1135 Diamonds', price: '$15.85' },
-            { img: 'Diamond.png', name: '1220 Diamonds', price: '$16.85' },
-            { img: 'Diamond.png', name: '1412 Diamonds', price: '$19.05' },
-            { img: 'Diamond.png', name: '1584 Diamonds', price: '$21.85' },
-            { img: 'Diamond.png', name: '1755 Diamonds', price: '$23.85' },
-            { img: 'Diamond.png', name: '2195 Diamonds', price: '$29.45' }
-        ];
+<script>
+/* ══════════════════════════════════════════
+   GAME DATA
+══════════════════════════════════════════ */
+const GAMES = [
+  {id:'mlbb', name:'MOBILE LEGENDS', img:'MLBB.png', e:'⚔️',
+   bg:'linear-gradient(135deg,#0f0620,#0b1535)', ok:true, twoField:true,
+   title:{kh:'Mobile Legends',en:'Mobile Legends'},
+   desc:{kh:'ពេជ្រទទួលស្គាល់ពីក្រុមហ៊ុន\nសុវត្ថិភាពដល់ Account',en:'Official Diamonds\nAccount Safe'}},
+  {id:'ff',   name:'FREE FIRE',      img:'FF.png',   e:'🔥',
+   bg:'linear-gradient(135deg,#160404,#200808)', ok:true, twoField:false,
+   title:{kh:'Free Fire',en:'Free Fire'},
+   desc:{kh:'ពេជ្រទទួលស្គាល់ពីក្រុមហ៊ុន\nសុវត្ថិភាពដល់ Account',en:'Official Diamonds\nAccount Safe'}},
+  {id:'hok',  name:'HONOR OF KINGS', img:'HOK.png',  e:'👑',
+   bg:'linear-gradient(135deg,#0c1018,#14103a)', ok:false},
+  {id:'mcgg', name:'MAGIC CHESS',    img:'MCGG.png', e:'♟️',
+   bg:'linear-gradient(135deg,#041210,#081a22)', ok:false},
+];
 
-        // Free Fire Packages
-        const ffPackages = [
-            { img: 'WeeklyLite.png', name: 'Weekly💎Lite', price: '$0.79', subtext: 'បាន20💎ភ្លាមៗ' },
-            { img: 'WeeklyLite.png', name: 'Weekly 💎Lite X3', price: '$2.25', subtext: 'បាន60💎ភ្លាមៗ' },
-            { img: 'WeeklyLite.png', name: 'Weekly💎Lite X5', price: '$3.60', subtext: 'បាន100💎ភ្លាមៗ' },
-            { img: 'WeeklyLite.png', name: 'Weekly💎 Lite X10', price: '$7.05', subtext: 'បាន200💎ភ្លាមៗ' },
-            { img: 'Weekly.png', name: 'Weekly💎 X1', price: '$1.85', subtext: 'បាន200💎ភ្លាមៗ' },
-            { img: 'Weekly.png', name: 'Weekly💎 X2', price: '$3.55', subtext: 'បាន400💎ភ្លាមៗ' },
-            { img: 'Weekly.png', name: 'Weekly💎 X3', price: '$5.25', subtext: 'បាន600💎ភ្លាមៗ' },
-            { img: 'Weekly.png', name: 'Weekly💎 X5', price: '$8.60', subtext: 'បាន1000💎ភ្លាមៗ' },
-            { img: 'Weekly.png', name: 'Weekly💎X10', price: '$17.05', subtext: 'បាន2000💎ភ្លាមៗ' },
-            { img: 'Monthly.png', name: 'Monthly💎X1', price: '$7.90', subtext: 'បាន1000💎ភ្លាមៗ' },
-            { img: 'Monthly.png', name: 'Monthly💎X2', price: '$15.65', subtext: 'បាន2000💎ភ្លាមៗ' },
-            { img: 'Monthly.png', name: 'Monthly💎X3', price: '$23.85', subtext: 'បាន3000💎ភ្លាមៗ' },
-            { img: 'Monthly.png', name: 'Monthly💎X5', price: '$38.90', subtext: 'បាន5000💎ភ្លាមៗ' },
-            { img: 'Monthly.png', name: 'Monthly💎X10', price: '$77.65', subtext: 'បាន10000💎ភ្លាមៗ' },
-            { img: 'Monthly.png', name: 'Weekly+Monthly💎', price: '$9.60', subtext: 'បាន1200💎ភ្លាមៗ' },
-            { img: 'Monthly.png', name: '3 in 1 Monthly 💎', price: '$10.30', subtext: 'បាន1220💎ភ្លាមៗ' },
-            { img: 'Monthly.png', name: '25💎 Diamonds', price: '$0.38' },
-            { img: 'Monthly.png', name: '50💎 Diamonds', price: '$0.66' },
-            { img: 'Monthly.png', name: '100💎 Diamonds', price: '$1.12' },
-            { img: 'Monthly.png', name: '310💎 Diamonds', price: '$3.00' },
-            { img: 'Monthly.png', name: '520💎 Diamonds', price: '$4.85' },
-            { img: 'Monthly.png', name: '1060💎 Diamonds', price: '$9.15' },
-            { img: 'Monthly.png', name: '2180💎 Diamonds', price: '$17.75' },
-            { img: 'Monthly.png', name: '5600💎 Diamonds', price: '$44.15' },
-            { img: 'Monthly.png', name: '11500💎 Diamonds', price: '$87.15' },
-            { img: 'Monthly.png', name: 'Evo Access 3 Day', price: '$0.75', subtext: 'Skin កាំភ្លើង 3ថ្ងៃ' },
-            { img: 'Monthly.png', name: 'Evo Access 7 Day', price: '$1.05', subtext: 'Skin កាំភ្លើង 7ថ្ងៃ' },
-            { img: 'Monthly.png', name: 'Evo Access 30 Day', price: '$2.65', subtext: 'Skin កាំភ្លើង 30ថ្ងៃ' }
-        ];
+const MLBB_PKG = [
+  {img:'WeeklyPass.png',e:'🎫',name:'WeeklyPass X1',  price:1.59},
+  {img:'WeeklyPass.png',e:'🎫',name:'WeeklyPass x2',  price:3.15},
+  {img:'WeeklyPass.png',e:'🎫',name:'WeeklyPass X3',  price:4.65},
+  {img:'Diamond.png',   e:'💎',name:'50+50 Diamonds',  price:1.00, badge:'ពេជ្រ X2'},
+  {img:'Diamond.png',   e:'💎',name:'150+150 Diamonds',price:2.55, badge:'ពេជ្រ X2'},
+  {img:'Diamond.png',   e:'💎',name:'250+250 Diamonds',price:3.95, badge:'ពេជ្រ X2'},
+  {img:'Diamond.png',   e:'💎',name:'500+500 Diamonds',price:7.77, badge:'ពេជ្រ X2'},
+  {img:'Diamond.png',   e:'💎',name:'22 Diamonds',    price:0.55},
+  {img:'Diamond.png',   e:'💎',name:'55 Diamonds',    price:0.89},
+  {img:'Diamond.png',   e:'💎',name:'86 Diamonds',    price:1.35},
+  {img:'Diamond.png',   e:'💎',name:'110 Diamonds',   price:1.89},
+  {img:'Diamond.png',   e:'💎',name:'165 Diamonds',   price:2.55},
+  {img:'Diamond.png',   e:'💎',name:'257 Diamonds',   price:3.65},
+  {img:'Diamond.png',   e:'💎',name:'343 Diamonds',   price:4.89},
+  {img:'Diamond.png',   e:'💎',name:'429 Diamonds',   price:6.00},
+  {img:'Diamond.png',   e:'💎',name:'514 Diamonds',   price:7.15},
+  {img:'Diamond.png',   e:'💎',name:'565 Diamonds',   price:7.65},
+  {img:'Diamond.png',   e:'💎',name:'600 Diamonds',   price:8.55},
+  {img:'Diamond.png',   e:'💎',name:'706 Diamonds',   price:9.85},
+  {img:'Diamond.png',   e:'💎',name:'878 Diamonds',   price:11.85},
+  {img:'Diamond.png',   e:'💎',name:'963 Diamonds',   price:13.45},
+  {img:'Diamond.png',   e:'💎',name:'1049 Diamonds',  price:14.75},
+  {img:'Diamond.png',   e:'💎',name:'1135 Diamonds',  price:15.85},
+  {img:'Diamond.png',   e:'💎',name:'1220 Diamonds',  price:16.85},
+  {img:'Diamond.png',   e:'💎',name:'1412 Diamonds',  price:19.05},
+  {img:'Diamond.png',   e:'💎',name:'1584 Diamonds',  price:21.85},
+  {img:'Diamond.png',   e:'💎',name:'1755 Diamonds',  price:23.85},
+  {img:'Diamond.png',   e:'💎',name:'2195 Diamonds',  price:29.45},
+];
 
-        function playCustomSound() {
-            clickSound.currentTime = 0;
-            clickSound.play().catch(e => console.log("Audio Error:", e));
-        }
+const FF_PKG = [
+  {img:'WeeklyLite.png',e:'💚',name:'Weekly💎Lite',        price:0.79, sub:'បាន20💎ភ្លាមៗ'},
+  {img:'WeeklyLite.png',e:'💚',name:'Weekly 💎Lite X3',    price:2.25, sub:'បាន60💎ភ្លាមៗ'},
+  {img:'WeeklyLite.png',e:'💚',name:'Weekly💎Lite X5',     price:3.60, sub:'បាន100💎ភ្លាមៗ'},
+  {img:'WeeklyLite.png',e:'💚',name:'Weekly💎 Lite X10',   price:7.05, sub:'បាន200💎ភ្លាមៗ'},
+  {img:'Weekly.png',    e:'💎',name:'Weekly💎 X1',         price:1.85, sub:'បាន200💎ភ្លាមៗ'},
+  {img:'Weekly.png',    e:'💎',name:'Weekly💎 X2',         price:3.55, sub:'បាន400💎ភ្លាមៗ'},
+  {img:'Weekly.png',    e:'💎',name:'Weekly💎 X3',         price:5.25, sub:'បាន600💎ភ្លាមៗ'},
+  {img:'Weekly.png',    e:'💎',name:'Weekly💎 X5',         price:8.60, sub:'បាន1000💎ភ្លាមៗ'},
+  {img:'Weekly.png',    e:'💎',name:'Weekly💎X10',         price:17.05,sub:'បាន2000💎ភ្លាមៗ'},
+  {img:'Monthly.png',   e:'🏆',name:'Monthly💎X1',         price:7.90, sub:'បាន1000💎ភ្លាមៗ'},
+  {img:'Monthly.png',   e:'🏆',name:'Monthly💎X2',         price:15.65,sub:'បាន2000💎ភ្លាមៗ'},
+  {img:'Monthly.png',   e:'🏆',name:'Monthly💎X3',         price:23.85,sub:'បាន3000💎ភ្លាមៗ'},
+  {img:'Monthly.png',   e:'🏆',name:'Monthly💎X5',         price:38.90,sub:'បាន5000💎ភ្លាមៗ'},
+  {img:'Monthly.png',   e:'🏆',name:'Monthly💎X10',        price:77.65,sub:'បាន10000💎ភ្លាមៗ'},
+  {img:'Monthly.png',   e:'🏆',name:'Weekly+Monthly💎',    price:9.60, sub:'បាន1200💎ភ្លាមៗ'},
+  {img:'Monthly.png',   e:'🏆',name:'3 in 1 Monthly 💎',  price:10.30,sub:'បាន1220💎ភ្លាមៗ'},
+  {img:'Diamond.png',   e:'💎',name:'25💎 Diamonds',       price:0.38},
+  {img:'Diamond.png',   e:'💎',name:'50💎 Diamonds',       price:0.66},
+  {img:'Diamond.png',   e:'💎',name:'100💎 Diamonds',      price:1.12},
+  {img:'Diamond.png',   e:'💎',name:'310💎 Diamonds',      price:3.00},
+  {img:'Diamond.png',   e:'💎',name:'520💎 Diamonds',      price:4.85},
+  {img:'Diamond.png',   e:'💎',name:'1060💎 Diamonds',     price:9.15},
+  {img:'Diamond.png',   e:'💎',name:'2180💎 Diamonds',     price:17.75},
+  {img:'Diamond.png',   e:'💎',name:'5600💎 Diamonds',     price:44.15},
+  {img:'Diamond.png',   e:'💎',name:'11500💎 Diamonds',    price:87.15},
+  {img:'Monthly.png',   e:'🎯',name:'Evo Access 3 Day',   price:0.75, sub:'Skin កាំភ្លើង 3ថ្ងៃ'},
+  {img:'Monthly.png',   e:'🎯',name:'Evo Access 7 Day',   price:1.05, sub:'Skin កាំភ្លើង 7ថ្ងៃ'},
+  {img:'Monthly.png',   e:'🎯',name:'Evo Access 30 Day',  price:2.65, sub:'Skin កាំភ្លើង 30ថ្ងៃ'},
+];
 
-        function showError(msg) {
-            playCustomSound();
-            const toast = document.getElementById('errorToast');
-            toast.textContent = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
+/* ══════════════════════════════════════════
+   TEXT TRANSLATIONS
+══════════════════════════════════════════ */
+const TX = {
+  sec:    {kh:'ជ្រើសរើសហ្គេម', en:'Select game'},
+  topup:  {kh:'បញ្ចូលទឹកប្រាក់', en:'TOPUP'},
+  soon:   {kh:'ឆាប់ៗ', en:'SOON'},
+  back:   {kh:'ត្រឡប់ក្រោយ', en:'Back'},
+  idlbl:  {kh:'បញ្ចូល User ID', en:'Enter User ID'},
+  pkglbl: {kh:'ជ្រើសរើសកញ្ចប់', en:'Select Package'},
+  chksel: {kh:'បានជ្រើសរើស', en:'Selected'},
+  chkpkg: {kh:'កញ្ចប់', en:'pkg'},
+  buy:    {kh:'ទិញ', en:'BUY'},
+  ml:     {kh:'ភាសា', en:'LANGUAGE'},
+  mt:     {kh:'រូបរាង', en:'THEME'},
+  errid:  {kh:'សូមបញ្ចូល User ID!', en:'Please enter User ID!'},
+  errsrv: {kh:'សូមបញ្ចូល Server ID!', en:'Please enter Server ID!'},
+  errpkg: {kh:'សូមជ្រើសរើសកញ្ចប់!', en:'Please select a package!'},
+  comingsoon:{kh:'cooming soon មកដល់ឆាប់ៗ', en:'Coming soon!'},
+  topuplbl:{kh:'បញ្ចូលពេជ្រ', en:'Top-up'},
+};
 
-        function showInfo(msg) {
-            playCustomSound();
-            const toast = document.getElementById('infoToast');
-            toast.textContent = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
+const THEMES=['th-em','th-gd','th-cv','th-ai','th-cr'];
+const TNAMES={'th-em':'Emerald','th-gd':'Luxury Gold','th-cv':'Cyber Violet','th-ai':'Arctic Ice','th-cr':'Crimson Red'};
 
-        function openTopup(game) {
-            playCustomSound();
-            currentGame = game;
+let lang='kh', curTheme='', menuOpen=false, currentGame=null, selectedPkgs=[], diTimer;
 
-            selectedPackages = [];
-            packageContainer.innerHTML = '';
-            inputContainer.innerHTML = '';
-            checkoutBar.classList.remove('show');
+/* ── sound ── */
+function pSnd(){const a=document.getElementById('snd');a.currentTime=0;a.play().catch(()=>{})}
 
-            if (game === 'MLBB') {
-                gameDetailHeader.innerHTML = `
-                    <img src="MLBB.png" alt="MLBB">
-                    <div>
-                        <h2>បញ្ចូលពេជ្រ Mobile Legends</h2>
-                        <p>ពេជ្រទទួលស្គាល់ពីក្រុមហ៊ុន<br>សុវត្ថិភាពដល់ Account </p>
-                    </div>
-                `;
-                inputContainer.innerHTML = `
-                    <input type="number" id="userIdInput" placeholder="User ID">
-                    <input type="number" id="serverIdInput" placeholder="Server ID">
-                `;
-                renderPackages(mlbbPackages);
-            }
-            else if (game === 'FF') {
-                gameDetailHeader.innerHTML = `
-                    <img src="FF.png" alt="FF">
-                    <div>
-                        <h2>បញ្ចូលពេជ្រ Free Fire</h2>
-                        <p>ពេជ្រទទួលស្គាល់ពីក្រុមហ៊ុន<br>សុវត្ថិភាពដល់ Account </p>
-                    </div>
-                `;
-                inputContainer.innerHTML = `
-                    <input type="number" id="userIdInput" placeholder="User ID">
-                `;
-                renderPackages(ffPackages);
-            }
+/* ── toast ── */
+function showErr(msg){
+  const t=document.getElementById('errToast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+function showInfo(msg){
+  pSnd();
+  const t=document.getElementById('infoToast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
 
-            homeView.style.display = 'none';
-            topupView.style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+/* ── dynamic island ── */
+function popDI(msg){
+  const d=document.getElementById('di');
+  document.getElementById('dtx').textContent=msg||'Online';
+  d.classList.remove('gone');d.classList.add('pop');
+  clearTimeout(diTimer);
+  diTimer=setTimeout(()=>{d.classList.remove('pop');setTimeout(()=>d.classList.add('gone'),450)},2200);
+}
 
-        function renderPackages(packages) {
-            packages.forEach(pkg => {
-                let badgeHtml = pkg.badge ? `<div class="pkg-badge">${pkg.badge}</div>` : '';
-                let subtextHtml = pkg.subtext ? `<div class="pkg-subtext">${pkg.subtext}</div>` : '';
+/* ── render home cards ── */
+function render(){
+  document.getElementById('gr').innerHTML=GAMES.map(g=>`
+    <div class="card${g.ok?'':' soon'}" onclick="${g.ok?`openTopup('${g.id}')`:``}">
+      ${!g.ok?`<div class="stag">${lang==='kh'?TX.soon.kh:TX.soon.en}</div>`:''}
+      <div class="ib" style="background:${g.bg}">
+        <img src="${g.img}" alt="${g.name}"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <span class="em" style="display:none">${g.e}</span>
+      </div>
+      <div class="gn">${g.name}</div>
+      <button class="tb ${g.ok?(lang==='kh'?'ka':'act'):(lang==='kh'?'ki':'ina')}"
+        ${g.ok?`onclick="event.stopPropagation();pSnd();openTopup('${g.id}')"`:``}
+        ${g.ok?'':'disabled'}>
+        ${g.ok?(lang==='kh'?TX.topup.kh:'TOPUP'):(lang==='kh'?TX.soon.kh:TX.soon.en)}
+      </button>
+    </div>`).join('');
+}
 
-                let cardHtml = `
-                    <div class="package-card" onclick="selectPackage(this, '${pkg.name}', '${pkg.price}')">
-                        <div class="pkg-img"><img src="${pkg.img}"></div>
-                        <div class="pkg-info">
-                            ${badgeHtml}
-                            ${subtextHtml}
-                            <div class="pkg-price">${pkg.price}</div>
-                            <div class="pkg-desc">${pkg.name}</div>
-                        </div>
-                    </div>
-                `;
-                packageContainer.innerHTML += cardHtml;
-            });
-        }
+/* ── update all UI text ── */
+function upd(){
+  const st=document.getElementById('stl');
+  st.textContent=TX.sec[lang]; st.className=lang==='kh'?'kh':'';
+  document.getElementById('ml').textContent=TX.ml[lang];
+  document.getElementById('mt').textContent=TX.mt[lang];
+  document.getElementById('okh').classList.toggle('on',lang==='kh');
+  document.getElementById('oen').classList.toggle('on',lang==='en');
+  document.getElementById('backTxt').textContent=TX.back[lang];
+  document.getElementById('idLabel').textContent=TX.idlbl[lang];
+  document.getElementById('pkgLabel').textContent=TX.pkglbl[lang];
+  document.getElementById('buyBtn').textContent=lang==='kh'?TX.buy.kh:TX.buy.en;
+}
 
-        function goHome() {
-            playCustomSound();
-            topupView.style.display = 'none';
-            homeView.style.display = 'block';
-            checkoutBar.classList.remove('show');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+/* ── language ── */
+function sLang(l){pSnd();lang=l;upd();render();popDI(l==='kh'?'ភាសាខ្មែរ':'English');cMenu()}
 
-        function selectPackage(element, name, priceStr) {
-            playCustomSound();
-            const price = parseFloat(priceStr.replace('$', ''));
+/* ── theme ── */
+function sTheme(t){
+  pSnd();
+  const w=document.getElementById('wrap');
+  w.classList.add('blr');
+  setTimeout(()=>{
+    document.body.classList.remove(...THEMES);
+    if(t) document.body.classList.add(t);
+    curTheme=t;
+    THEMES.forEach(x=>document.getElementById(x).classList.toggle('on',x===t));
+    w.classList.remove('blr');
+  },80);
+  popDI(TNAMES[t]);cMenu();
+}
 
-            if (element.classList.contains('selected')) {
-                element.classList.remove('selected');
-                selectedPackages = selectedPackages.filter(p => p.name !== name);
-            } else {
-                element.classList.add('selected');
-                selectedPackages.push({ name: name, price: price, priceStr: priceStr });
-            }
+/* ── menu ── */
+function tMenu(){pSnd();menuOpen=!menuOpen;syncMenu()}
+function cMenu(){menuOpen=false;syncMenu()}
+function syncMenu(){
+  document.getElementById('menu').classList.toggle('open',menuOpen);
+  document.getElementById('ov').classList.toggle('on',menuOpen);
+  document.getElementById('hbg').classList.toggle('open',menuOpen);
+}
 
-            updateCheckoutBar();
-        }
+/* ══════════════════════════════════════════
+   TOPUP PAGE
+══════════════════════════════════════════ */
+function openTopup(id){
+  pSnd();
+  currentGame=GAMES.find(g=>g.id===id);
+  if(!currentGame||!currentGame.ok){showInfo(TX.comingsoon[lang]);return}
 
-        function updateCheckoutBar() {
-            if (selectedPackages.length > 0) {
-                let total = 0;
-                selectedPackages.forEach(p => total += p.price);
+  selectedPkgs=[];
+  document.getElementById('checkoutBar').classList.remove('show');
 
-                selectedNameText.textContent = `បានជ្រើសរើស: ${selectedPackages.length} កញ្ចប់`;
-                selectedPriceText.textContent = `$${total.toFixed(2)}`;
-                checkoutBar.classList.add('show');
-            } else {
-                checkoutBar.classList.remove('show');
-            }
-        }
+  /* header */
+  const gdh=document.getElementById('gdh');
+  const gameTitle=`${TX.topuplbl[lang]} ${currentGame.title[lang]}`;
+  gdh.innerHTML=`
+    <img src="${currentGame.img}" alt="${currentGame.name}"
+      onerror="this.style.display='none';document.getElementById('gdh-em').style.display='flex'"/>
+    <div id="gdh-em" style="width:64px;height:64px;border-radius:15px;background:rgba(0,0,0,.3);display:none;align-items:center;justify-content:center;font-size:2.2rem;flex-shrink:0">${currentGame.e}</div>
+    <div class="gdh-info">
+      <h2>${gameTitle}</h2>
+      <p>${currentGame.desc[lang]}</p>
+    </div>`;
 
-        function processCheckout() {
-            playCustomSound();
+  /* inputs */
+  const ic=document.getElementById('inputContainer');
+  if(currentGame.twoField){
+    ic.innerHTML=`<input type="text" id="uid" placeholder="User ID"/><input type="text" id="srvid" placeholder="Server ID"/>`;
+  } else {
+    ic.innerHTML=`<input type="text" id="uid" placeholder="User ID"/>`;
+  }
 
-            const userId = document.getElementById('userIdInput') ? document.getElementById('userIdInput').value.trim() : '';
-            const serverIdInput = document.getElementById('serverIdInput');
-            const serverId = serverIdInput ? serverIdInput.value.trim() : '';
+  /* packages */
+  const pkgs=id==='mlbb'?MLBB_PKG:FF_PKG;
+  const pc=document.getElementById('pkgContainer');
+  pc.innerHTML='';
+  pkgs.forEach((p,i)=>{
+    const delay=(i*0.04).toFixed(2);
+    const badge=p.badge?`<div class="pkg-badge">${p.badge}</div>`:'';
+    const sub=p.sub?`<div class="pkg-sub">${p.sub}</div>`:'';
+    const div=document.createElement('div');
+    div.className='pkg-card';
+    div.style.animationDelay=delay+'s';
+    div.innerHTML=`
+      <div class="pkg-ico">
+        <img src="${p.img}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <span class="pkg-em" style="display:none">${p.e}</span>
+      </div>
+      <div class="pkg-info">
+        ${badge}${sub}
+        <div class="pkg-price">$${p.price.toFixed(2)}</div>
+        <div class="pkg-desc">${p.name}</div>
+      </div>`;
+    div.onclick=()=>selectPkg(div,p);
+    pc.appendChild(div);
+  });
 
-            if (!userId) {
-                showError("សូមបញ្ចូល User ID ជាមុនសិន!");
-                return;
-            }
-            if (currentGame === 'MLBB' && !serverId) {
-                showError("សូមបញ្ចូល Server ID ជាមុនសិន!");
-                return;
-            }
-            if (selectedPackages.length === 0) {
-                showError("សូមជ្រើសរើសកញ្ចប់ពេជ្រ!");
-                return;
-            }
+  document.getElementById('homeView').style.display='none';
+  document.getElementById('topupView').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-            let total = 0;
-            let packageListText = '';
+function goHome(){
+  pSnd();
+  document.getElementById('topupView').style.display='none';
+  document.getElementById('homeView').style.display='block';
+  document.getElementById('checkoutBar').classList.remove('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-            selectedPackages.forEach(p => {
-                packageListText += `${p.name}  ${p.priceStr}\n`;
-                total += p.price;
-            });
+function selectPkg(el,pkg){
+  pSnd();
+  if(el.classList.contains('sel')){
+    el.classList.remove('sel');
+    selectedPkgs=selectedPkgs.filter(p=>p.name!==pkg.name);
+  } else {
+    el.classList.add('sel');
+    selectedPkgs.push(pkg);
+  }
+  updCheckout();
+}
 
-            let message = '';
-            if (currentGame === 'MLBB') {
-                message = `Game Mobile legends\nកញ្ចប់ពេជ្យ\n${packageListText}Account\nUser ID ${userId}\nServer ID ${serverId}\nតម្លៃសរុប $${total.toFixed(2)}`;
-            } else if (currentGame === 'FF') {
-                message = `Game Free Fire\nកញ្ចប់ពេជ្យ\n${packageListText}Account\nUser ID ${userId}\nតម្លៃសរុប $${total.toFixed(2)}`;
-            }
+function updCheckout(){
+  const bar=document.getElementById('checkoutBar');
+  if(selectedPkgs.length>0){
+    const total=selectedPkgs.reduce((s,p)=>s+p.price,0);
+    document.getElementById('chkName').textContent=
+      `${TX.chksel[lang]}: ${selectedPkgs.length} ${TX.chkpkg[lang]}`;
+    document.getElementById('chkPrice').textContent=`$${total.toFixed(2)}`;
+    bar.classList.remove('pop');void bar.offsetWidth;bar.classList.add('pop');
+    bar.classList.add('show');
+  } else {
+    bar.classList.remove('show');
+  }
+}
 
-            const telegramUrl = `https://t.me/Yupai_official?text=${encodeURIComponent(message)}`;
-            window.open(telegramUrl, '_blank');
-        }
-        function equalizeImageBoxes() {
-            const boxes = document.querySelectorAll('.game-icon-box');
-            if (!boxes.length) return;
-            // Reset first
-            boxes.forEach(b => b.style.height = '');
-            // Find max natural height (they're in a grid, so just set all to same calc)
-            const card = document.querySelector('.game-card');
-            if (!card) return;
-            const cardWidth = card.offsetWidth;
-            boxes.forEach(b => { b.style.height = cardWidth + 'px'; });
-        }
+function processCheckout(){
+  pSnd();
+  const uid=document.getElementById('uid');
+  const srvEl=document.getElementById('srvid');
+  if(!uid||!uid.value.trim()){showErr(TX.errid[lang]);return}
+  if(currentGame.twoField&&srvEl&&!srvEl.value.trim()){showErr(TX.errsrv[lang]);return}
+  if(selectedPkgs.length===0){showErr(TX.errpkg[lang]);return}
 
-        window.addEventListener('load', equalizeImageBoxes);
-        window.addEventListener('resize', equalizeImageBoxes);
-    </script>
+  const total=selectedPkgs.reduce((s,p)=>s+p.price,0);
+  let pkgList=selectedPkgs.map(p=>`${p.name}  $${p.price.toFixed(2)}`).join('\n');
+  let msg='';
+  if(currentGame.id==='mlbb'){
+    msg=`Game Mobile Legends\nកញ្ចប់ពេជ្រ\n${pkgList}\nAccount\nUser ID: ${uid.value.trim()}\nServer ID: ${srvEl?srvEl.value.trim():''}\nតម្លៃសរុប: $${total.toFixed(2)}`;
+  } else {
+    msg=`Game Free Fire\nកញ្ចប់ពេជ្រ\n${pkgList}\nAccount\nUser ID: ${uid.value.trim()}\nតម្លៃសរុប: $${total.toFixed(2)}`;
+  }
+  window.open('https://t.me/Yupai_official?text='+encodeURIComponent(msg),'_blank');
+}
 
+/* ══════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════ */
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('sw').classList.add('in'),140);
+  setTimeout(()=>document.getElementById('sl').classList.add('in'),360);
+  setTimeout(()=>{
+    document.getElementById('splash').classList.add('out');
+    document.getElementById('app').classList.add('show');
+    upd();render();
+    setTimeout(()=>popDI('Store is Online ✦'),320);
+  },2000);
+});
+</script>
 </body>
 </html>
